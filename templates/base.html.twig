@@ -1,17 +1,78 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}owoody{% endblock %}</title>
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-white">
+        <header>
+            {# https://tailwindui.com/components/application-ui/navigation/navbars#component-b6bd4615a762a0d24780157803ad319e #}
+            {% set route = app.request.attributes.get('_route') %}
+            {% set navigation_entries = [{'route': 'index' ,'label': 'Dashboard'}, {'route': 'route' ,'label': 'Routes'}, {'route': 'setting' ,'label': 'Settings'}] %}
+            <nav class="border-b border-gray-900/10" x-data="{ open: false }">
+                <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+                    <div class="relative flex h-16 justify-between">
+                        <div class="inset-y-0 left-0 flex items-center sm:hidden">
+                            {% block navigation_button %}
+                            <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primery-500" aria-controls="mobile-menu" @click="open = !open" x-bind:aria-expanded="open.toString()">
+                                <span class="absolute -inset-0.5"></span>
+                                <span class="sr-only">Open main menu</span>
+                                <svg x-description="Icon when menu is closed." x-state:on="Menu open" x-state:off="Menu closed" class="size-6 block" :class="{ 'hidden': open, 'block': !(open) }" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                                <svg x-description="Icon when menu is open." x-state:on="Menu open" x-state:off="Menu closed" class="size-6 hidden" :class="{ 'block': open, 'hidden': !(open) }" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            {% endblock %}
+                        </div>
+                        <div class="ml-2.5 flex shrink-0 items-center sm:hidden">
+                            <h1 class="text-lg/6 font-semibold text-gray-900">{% block navigation_title %}{% endblock %}</h1>
+                        </div>
+                        <div class="flex flex-1 items-center justify-start sm:items-stretch">
+                            <div class="hidden sm:flex sm:space-x-8">
+                                {% for entry in navigation_entries %}
+                                    {% if route starts with entry.route %}
+                                        <a href="{{ path(entry.route) }}" class="inline-flex items-center border-b-2 border-primery-500 px-1 pt-1 text-sm font-medium text-gray-900">{{ entry.label }}</a>
+                                    {% else %}
+                                        <a href="{{ path(entry.route) }}" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">{{ entry.label }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-2 gap-x-4 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                            {% block navigation_buttons %}{% endblock %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu, show/hide based on menu state. -->
+                <div x-description="Mobile menu, show/hide based on menu state." class="sm:hidden" id="mobile-menu" x-show="open" x-cloak>
+                    <div class="space-y-1 pb-4 pt-2">
+                        {% for entry in navigation_entries %}
+                            {% if route starts with entry.route %}
+                                <a href="{{ path(entry.route) }}" class="block border-l-4 border-primery-500 bg-primery-50 py-2 pl-3 pr-4 text-base font-medium text-primery-700">{{ entry.label }}</a>
+                            {% else %}
+                                <a href="{{ path(entry.route) }}" class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">{{ entry.label }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                {% block main %}{% endblock %}
+            </div>
+        </main>
     </body>
 </html>
