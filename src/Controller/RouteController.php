@@ -33,9 +33,23 @@ final class RouteController extends AbstractController
     }
 
     #[Route('/routes/edit/{id:route}', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
-    public function edit(EntityRoute $route): Response
+    public function edit(EntityRoute $route, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $form = $this->createForm(RouteType::class, $route, [
+            'method' => 'POST',
+            'action' => $this->generateUrl('route_edit', ['id' => $route->getId()]),
+            'attr' => [
+                'id' => 'hold_setup_form',
+            ],
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($route);
+            $entityManager->flush();
+        }
         return $this->render('route/edit.html.twig', [
+            'form' => $form,
             'route_entity' => $route,
         ]);
     }
