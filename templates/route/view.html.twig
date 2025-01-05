@@ -25,7 +25,29 @@
 
 {% block main %}
 {% set colorClasses = ['text-gray-400', 'text-blue-400', 'text-red-400', 'text-yellow-400', 'text-green-400'] %}
-<div class="mx-auto max-w-2xl pb-5 divide-y divide-gray-100">
+<script>
+    function initRouteView()
+    {
+        return {
+            bulbIsOn: Alpine.$persist(false),
+            init() {
+                if (this.bulbIsOn) {
+                    this.triggerBulb();
+                }
+            },
+            async triggerBulb() {
+                try {
+                    const response = await  fetch('{{ path('bulb') }}',{
+                        method: "POST",
+                        body: "{{ route_entity.holdSetup|json_encode }}"
+                    });
+                } catch (error) {
+                }
+            }
+        }
+    }    
+</script>
+<div x-data="initRouteView()" @bulb.window="triggerBulb()" class="mx-auto max-w-2xl pb-5 divide-y divide-gray-100">
     <div class="overflow-hidden rounded-lg py-5">
         {% for rowIndex in 0..route_entity.holdSetup|length-1 %}
             <div class="flex flex-row">
