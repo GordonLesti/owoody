@@ -12,14 +12,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 final class RouteController extends AbstractController
 {
-    #[Route('/routes', name: 'route', methods: ['GET'])]
+    #[Route('/', name: 'route', methods: ['GET'])]
     public function index(RouteRepository $routeRepository): Response
     {
         return $this->render('route/index.html.twig', [
             'routes' => $routeRepository->findAll()
+        ]);
+    }
+
+    #[Route('/routes/view/{id:route}', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
+    public function view(EntityRoute $route): Response
+    {
+        return $this->render('route/view.html.twig', [
+            'route_entity' => $route,
+        ]);
+    }
+
+    #[Route('/routes/edit/{id:route}', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
+    public function edit(EntityRoute $route): Response
+    {
+        return $this->render('route/edit.html.twig', [
+            'route_entity' => $route,
         ]);
     }
 

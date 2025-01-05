@@ -17,7 +17,7 @@
         <header>
             {# https://tailwindui.com/components/application-ui/navigation/navbars#component-b6bd4615a762a0d24780157803ad319e #}
             {% set route = app.request.attributes.get('_route') %}
-            {% set navigation_entries = [{'route': 'index' ,'label': 'Dashboard'}, {'route': 'route' ,'label': 'Routes'}, {'route': 'setting' ,'label': 'Settings'}] %}
+            {% set navigation_entries = [{'route': 'route' ,'label': 'Routes'}, {'route': 'setting' ,'label': 'Settings'}] %}
             <nav class="border-b border-gray-900/10" x-data="{ open: false }">
                 <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                     <div class="relative flex h-16 justify-between">

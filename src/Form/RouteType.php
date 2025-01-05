@@ -41,6 +41,9 @@ final class RouteType extends AbstractType
             'mapped' => true,
             'required' => false,
             'class' => Fontainebleau::class,
+            'choice_label' => static function (\UnitEnum $choice): string {
+                return $choice->value;
+            },
         ])->add('note', TextareaType::class, [
             'label' => 'Note',
             'mapped' => true,
