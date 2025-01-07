@@ -6,6 +6,7 @@ namespace App\Enum;
 
 enum LedHoldType: int
 {
+    case NONE = 0;
     case HAND = 1;
     case FINISH = 2;
     case FOOT = 3;

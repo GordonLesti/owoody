@@ -15,27 +15,31 @@
                 holdSetupValue: {% if value is defined and value is not empty and value != '[]' %}"{{ value }}"{% else %}JSON.stringify(emptyHoldSetup){% endif %},
                 init() {
                     this.holdSetup = JSON.parse(this.holdSetupValue);
-                    if (this.bulbIsOn) {
-                        this.triggerBulb();
-                    }
+                    this.triggerBulb();
                 },
                 clickHold(rowIndex, columnIndex) {
                     this.holdSetup[rowIndex][columnIndex] = (this.holdSetup[rowIndex][columnIndex] + 1) % 5;
                     this.holdSetupValue = JSON.stringify(this.holdSetup);
                 },
+                observeBulb($event) {
+                    this.bulbIsOn = $event.detail.isOn;
+                    this.triggerBulb();
+                },
                 async triggerBulb() {
-                    try {
-                        const response = await  fetch('{{ path('bulb') }}',{
-                            method: "POST",
-                            body: this.holdSetupValue
-                        });
-                    } catch (error) {
+                    if (this.bulbIsOn) {
+                        try {
+                            const response = await  fetch('{{ path('bulb') }}',{
+                                method: "POST",
+                                body: this.holdSetupValue
+                            });
+                        } catch (error) {
+                        }
                     }
                 }
             };
         }
     </script>
-    <div x-data="initHoldSetup{{ random_id }}()" @bulb.window="triggerBulb()" class="overflow-hidden rounded-lg mt-2">
+    <div x-data="initHoldSetup{{ random_id }}()" @bulb.window="observeBulb" class="overflow-hidden rounded-lg mt-2">
         {% for rowIndex in 0..rows-1 %}
             <div class="flex flex-row">
                 {% for columnIndex in 0..columns-1 %}

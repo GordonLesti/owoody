@@ -5,9 +5,7 @@
             bulbIsOn: Alpine.$persist(false),
             clickBulbButton() {
                 this.bulbIsOn = !this.bulbIsOn;
-                if (this.bulbIsOn) {
-                    window.dispatchEvent(new Event('bulb'));
-                }
+                this.$dispatch('bulb', { isOn: this.bulbIsOn });
             }
         }
     }

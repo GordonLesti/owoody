@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\LedHoldType;
 use App\Service\NeoPixel;
+use App\Service\PixelOrder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,19 +18,19 @@ final class BulbController extends AbstractController
     public function index(Request $request): Response
     {
         $colors = [
-            null,
-            '#0000FF',
-            '#FF0000',
-            '#FFFF00',
-            '#00FF00',
+            LedHoldType::NONE->value => null,
+            LedHoldType::HAND->value => 0x0000FF,
+            LedHoldType::FINISH->value => 0x00FF00,
+            LedHoldType::FOOT->value => 0xFFFF00,
+            LedHoldType::START->value => 0xFF0000,
         ];
-        $pixelConfig = $request->toArray();
+        $pixelConfig = array_reverse($request->toArray());
         $flattenPixelConfig = array_merge(...$pixelConfig);
-        $neoPixels = new NeoPixel(count($flattenPixelConfig));
-        foreach ($flattenPixelConfig as $index => $pixel) {
+        $neoPixels = new NeoPixel(count($flattenPixelConfig), PixelOrder::RGB);
+        foreach (array_filter($flattenPixelConfig) as $index => $pixel) {
             $neoPixels[$index] = $colors[$pixel];
         }
         $neoPixels->show();
-        return $this->json($request->toArray());
+        return $this->json([]);
     }
 }
