@@ -24,7 +24,7 @@ final class RouteController extends AbstractController
         ]);
     }
 
-    #[Route('/routes/view/{id:route}', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
+    #[Route('/routes/{id:route}/view', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
     public function view(EntityRoute $route): Response
     {
         return $this->render('route/view.html.twig', [
@@ -32,8 +32,8 @@ final class RouteController extends AbstractController
         ]);
     }
 
-    #[Route('/routes/edit/{id:route}', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
-    public function edit(EntityRoute $route, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/routes/{id:route}/edit', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
+    public function edit(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RouteType::class, $route, [
             'method' => 'POST',
@@ -74,5 +74,18 @@ final class RouteController extends AbstractController
         return $this->render('route/new.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    #[Route('/routes/{id:route}/delete', name: 'route_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
+    public function delete(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
+    {
+        $token = $request->getPayload()->get('token');
+        if (!$this->isCsrfTokenValid('delete', $token)) {
+            return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
+        }
+        $entityManager->remove($route);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
     }
 }
