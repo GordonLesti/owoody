@@ -34,6 +34,7 @@ final class SettingController extends AbstractController
             if ($form->isValid()) {
                 $entityManager->persist($setting);
                 $entityManager->flush();
+                $this->addFlash('success', 'Settings updated successfully!');
             }
         } elseif ($parent !== null) {
             $form = $this->createForm(SettingType::class, $parent);

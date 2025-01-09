@@ -47,6 +47,9 @@ final class RouteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($route);
             $entityManager->flush();
+            $this->addFlash('success', 'Post updated successfully!');
+
+            return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('route/edit.html.twig', [
             'form' => $form,
@@ -70,6 +73,9 @@ final class RouteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($route);
             $entityManager->flush();
+            $this->addFlash('success', 'Post created successfully!');
+
+            return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
         return $this->render('route/new.html.twig', [
             'form' => $form,
@@ -85,6 +91,7 @@ final class RouteController extends AbstractController
         }
         $entityManager->remove($route);
         $entityManager->flush();
+        $this->addFlash('success', 'Route deleted successfully!');
 
         return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
     }
