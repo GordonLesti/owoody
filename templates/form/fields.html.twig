@@ -22,6 +22,7 @@
                     const holdValue = (this.holdSetup[rowIndex][columnIndex] + 1) % 5;
                     this.holdSetup[rowIndex][columnIndex] = holdValue;
                     this.holdSetupValue = JSON.stringify(this.holdSetup);
+                    this.triggerBulb();
                     this.badgeStatus = holdValue;
                     switch (this.holdSetup[rowIndex][columnIndex]) {
                         case 1:
