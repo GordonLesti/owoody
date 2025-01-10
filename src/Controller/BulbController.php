@@ -20,9 +20,9 @@ final class BulbController extends AbstractController
         $colors = [
             LedHoldType::NONE->value => null,
             LedHoldType::HAND->value => 0x0000FF,
-            LedHoldType::FINISH->value => 0x00FF00,
+            LedHoldType::FINISH->value => 0xFF0000,
             LedHoldType::FOOT->value => 0xFFFF00,
-            LedHoldType::START->value => 0xFF0000,
+            LedHoldType::START->value => 0x00FF00,
         ];
         $pixelConfig = array_reverse($request->toArray());
         $flattenPixelConfig = array_merge(...$pixelConfig);
