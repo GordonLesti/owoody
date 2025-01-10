@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Route as EntityRoute;
 use App\Form\RouteType;
 use App\Repository\RouteRepository;
+use App\Repository\SettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,10 +26,16 @@ final class RouteController extends AbstractController
     }
 
     #[Route('/routes/{id:route}/view', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
-    public function view(EntityRoute $route): Response
+    public function view(EntityRoute $route, SettingRepository $settingRepository): Response
     {
+        $setting = $settingRepository->getLatestSetting();
+        $isSymmetric = false;
+        if ($setting !== null) {
+            $isSymmetric = $setting->isSymmetric();
+        }
         return $this->render('route/view.html.twig', [
             'route_entity' => $route,
+            'is_symmetric' => $isSymmetric,
         ]);
     }
 
@@ -47,7 +54,7 @@ final class RouteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($route);
             $entityManager->flush();
-            $this->addFlash('success', 'Post updated successfully!');
+            $this->addFlash('success', 'Route updated successfully!');
 
             return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -73,7 +80,7 @@ final class RouteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($route);
             $entityManager->flush();
-            $this->addFlash('success', 'Post created successfully!');
+            $this->addFlash('success', 'Route created successfully!');
 
             return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }

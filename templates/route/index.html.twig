@@ -3,7 +3,7 @@
 {% block navigation_title %}Routes{% endblock %}
 
 {% block navigation_buttons %}
-<button onclick="location.href='{{ path('route_new') }}'" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
+<button @click="location.href='{{ path('route_new') }}'" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
     <span class="absolute -inset-1.5"></span>
     <span class="sr-only">Add Route</span>
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -22,7 +22,7 @@
                       <a href="{{ path('route_view', {id: route.id}) }}" class="hover:underline">{{ route.name }}</a>
                   </p>
                   <div class="mt-1 items-center text-xs/5 text-gray-500">
-                      <p><time datetime="{{ route.createdAt|date('Y-m-d') }}">{{ route.createdAt|date('Y-m-d') }}</time></p>
+                      <p><time datetime="{{ route.createdAt|date('Y-m-d') }}">{{ route.createdAt|date }}</time></p>
                   </div>
               </div>
               <div class="w-auto">

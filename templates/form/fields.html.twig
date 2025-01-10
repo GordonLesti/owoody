@@ -1,9 +1,8 @@
 {% block hold_setup_widget %}
-    {% set random_id = random() %}
     <script>
         "use strict";
 
-        function initHoldSetup{{ random_id }}() {
+        function initHoldSetup() {
             const emptyHoldSetup = Array({{ rows }});
             const emptyRow = Array({{ columns }});
             emptyRow.fill(0, 0);
@@ -66,7 +65,7 @@
             };
         }
     </script>
-    <div x-data="initHoldSetup{{ random_id }}()" @bulb.window="observeBulb" class="relative mt-2">
+    <div x-data="initHoldSetup" @bulb.window="observeBulb" class="relative mt-2">
         {% for rowIndex in 0..rows-1 %}
             <div class="flex flex-row">
                 {% for columnIndex in 0..columns-1 %}
@@ -87,7 +86,7 @@
                 {% endfor %}
             </div>
         {% endfor %}
-        <span class="hidden inline-flex items-center rounded-full px-2 py-1 text-xs font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
+        <span class="hidden inline-flex items-center rounded-full px-2 py-1 text-md font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
             'hidden': badgeStatus == 0,
             'bg-blue-100 text-blue-700': badgeStatus == 1,
             'bg-red-100 text-red-700': badgeStatus == 2,

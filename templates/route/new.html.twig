@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block navigation_button %}
-<button type="button" onclick="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primery-500">
+<button type="button" @click="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primery-500">
     <span class="absolute -inset-0.5"></span>
     <span class="sr-only">Back to Routes</span>
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -14,7 +14,7 @@
 
 {% block navigation_buttons %}
 {% include 'button/bulb.html.twig' %}
-<button type="button" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2" onclick="document.getElementById('hold_setup_form').submit()">
+<button @click="document.getElementById('hold_setup_form').submit()" type="button" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
     <span class="absolute -inset-1.5"></span>
     <span class="sr-only">Save Route</span>
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
