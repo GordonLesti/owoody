@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Form\DataTransformer\JsonTransformer;
-use App\Repository\SettingRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +15,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class HoldSetupType extends AbstractType
 {
     public function __construct(
-        private readonly SettingRepository $settingRepository,
         private readonly JsonTransformer $jsonTransformer
     ) {
     }

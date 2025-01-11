@@ -92,7 +92,7 @@ final class RouteController extends AbstractController
     #[Route('/routes/{id:route}/delete', name: 'route_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
     public function delete(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
     {
-        $token = $request->getPayload()->get('token');
+        $token = (string) $request->getPayload()->get('token');
         if (!$this->isCsrfTokenValid('delete', $token)) {
             return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
         }

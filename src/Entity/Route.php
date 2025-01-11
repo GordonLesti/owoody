@@ -17,6 +17,7 @@ class Route
     #[ORM\Column]
     private ?int $id = null;
 
+    /** @var array<int, array<int, int>> */
     #[ORM\Column(type: Types::JSON)]
     private array $holdSetup = [];
 
@@ -40,11 +41,24 @@ class Route
         return $this->id;
     }
 
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return array<int, array<int, int>>
+     */
     public function getHoldSetup(): array
     {
         return $this->holdSetup;
     }
 
+    /**
+     * @param array<int, array<int, int>> $holdSetup
+     */
     public function setHoldSetup(array $holdSetup): static
     {
         $this->holdSetup = $holdSetup;

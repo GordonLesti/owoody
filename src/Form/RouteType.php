@@ -8,6 +8,7 @@ use App\Entity\Route;
 use App\Enum\Fontainebleau;
 use App\Form\Type\HoldSetupType;
 use App\Repository\SettingRepository;
+use BackedEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -41,8 +42,8 @@ final class RouteType extends AbstractType
             'mapped' => true,
             'required' => false,
             'class' => Fontainebleau::class,
-            'choice_label' => static function (\UnitEnum $choice): string {
-                return $choice->value;
+            'choice_label' => static function (BackedEnum $choice): string {
+                return (string) $choice->value;
             },
         ])->add('note', TextareaType::class, [
             'label' => 'Note',

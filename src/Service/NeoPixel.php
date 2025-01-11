@@ -7,8 +7,12 @@ use ArrayAccess;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
+/**
+ * @implements ArrayAccess<int, int|null>
+ */
 class NeoPixel implements ArrayAccess
 {
+    /** @var int[] */
     private array $pixels = [];
 
     public function __construct(
@@ -19,9 +23,6 @@ class NeoPixel implements ArrayAccess
 
     public function offsetExists(mixed $offset): bool
     {
-        if (!is_int($offset)) {
-            throw new InvalidArgumentException('Invalid offset. Only int allowed.');
-        }
         return $offset > -1 && $offset < $this->pixelNum;
     }
 
@@ -45,7 +46,7 @@ class NeoPixel implements ArrayAccess
         if (in_array($this->pixelOrder, [PixelOrder::RGB, PixelOrder::GRB])) {
             $maxLimit = 0x1000000;
         }
-        if (!is_int($value) || $offset < -1 || $offset > $maxLimit) {
+        if ($offset < -1 || $offset > $maxLimit) {
             throw new InvalidArgumentException(sprintf(
                 "Invalid value. Greater or equal 0 and smaller %X allowed.",
                 $maxLimit
@@ -76,12 +77,7 @@ class NeoPixel implements ArrayAccess
         shell_exec($cmd);
     }
 
-    public function fill(?string $value): void
-    {
-        $this->pixels = array_fill(0, $this->pixelNum, $value);
-    }
-
-    private function checkOffset(mixed $offset): void
+    private function checkOffset(int $offset): void
     {
         if (!$this->offsetExists($offset)) {
             throw new OutOfBoundsException(sprintf(
