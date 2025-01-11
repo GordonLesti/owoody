@@ -5,7 +5,7 @@
             isMirrored: false,
             clickMirror() {
                 this.isMirrored = !this.isMirrored;
-                this.$dispatch('mirror', { isMirrored: this.isMirrored });
+                this.$dispatch('mirror', this.isMirrored);
             }
         };
     }
