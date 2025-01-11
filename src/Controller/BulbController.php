@@ -25,6 +25,11 @@ final class BulbController extends AbstractController
             LedHoldType::START->value => 0x00FF00,
         ];
         $pixelConfig = array_reverse($request->toArray());
+        for ($i = 0; $i < count($pixelConfig); $i++) {
+            if ($i % 2 === 1) {
+                $pixelConfig[$i] = array_reverse($pixelConfig[$i]);
+            }
+        }
         $flattenPixelConfig = array_merge(...$pixelConfig);
         $neoPixels = new NeoPixel(count($flattenPixelConfig), PixelOrder::RGB);
         foreach (array_filter($flattenPixelConfig) as $index => $pixel) {

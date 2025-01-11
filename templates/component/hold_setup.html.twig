@@ -1,61 +1,76 @@
 <script>
     "use strict";
 
-    function initHoldSetup() {
-        const emptyHoldSetup = Array({{ rows }});
+    function initHoldSetup(rows, columns, holdSetup, editMode) {
+        const emptyHoldSetup = Array();
         const emptyRow = Array({{ columns }});
         emptyRow.fill(0, 0);
         emptyHoldSetup.fill(emptyRow, 0);
 
         return {
             bulbIsOn: Alpine.$persist(false),
+            isMirrored: false,
             holdSetup: [],
-            holdSetupValue: {% if value is defined and value is not empty and value != '[]' %}"{{ value }}"{% else %}JSON.stringify(emptyHoldSetup){% endif %},
             badgeStatus: 0,
             badgeText: '',
             init() {
-                this.holdSetup = JSON.parse(this.holdSetupValue);
+                this.holdSetup = (holdSetup === '' || holdSetup === '[]') ? this.createEmptyHoldSetup() : JSON.parse(holdSetup);
+                console.log(this.holdSetup);
+                this.$dispatch('hold-setup-change', this.holdSetup);
                 this.triggerBulb();
+            },
+            createEmptyHoldSetup() {
+                return Array(rows).fill().map(()=>Array(columns).fill(0, 0));
             },
             clickHold(rowIndex, columnIndex) {
-                const holdValue = (this.holdSetup[rowIndex][columnIndex] + 1) % 5;
-                this.holdSetup[rowIndex][columnIndex] = holdValue;
-                this.holdSetupValue = JSON.stringify(this.holdSetup);
-                this.badgeStatus = holdValue;
-                switch (this.holdSetup[rowIndex][columnIndex]) {
-                    case 1:
-                        this.badgeText = 'Hand';
-                        break;
-                    case 2:
-                        this.badgeText = 'Top';
-                        break;
-                    case 3:
-                        this.badgeText = 'Foot';
-                        break;
-                    case 4:
-                        this.badgeText = 'Start';
-                        break;
-                    default:
-                        this.badgeText = '';
-                        break;
-                };
-                setTimeout(() => {
-                    if (this.badgeStatus === holdValue) {
-                        this.badgeStatus = 0;
-                        this.badgeText = '';
-                    }
-                }, 1000);
+                if (editMode) {
+                    const holdValue = (this.holdSetup[rowIndex][columnIndex] + 1) % 5;
+                    this.holdSetup[rowIndex][columnIndex] = holdValue;
+                    this.$dispatch('hold-setup-change', this.holdSetup);
+                    this.triggerBulb();
+                    this.badgeStatus = holdValue;
+                    switch (this.holdSetup[rowIndex][columnIndex]) {
+                        case 1:
+                            this.badgeText = 'Hand';
+                            break;
+                        case 2:
+                            this.badgeText = 'Top';
+                            break;
+                        case 3:
+                            this.badgeText = 'Foot';
+                            break;
+                        case 4:
+                            this.badgeText = 'Start';
+                            break;
+                        default:
+                            this.badgeText = '';
+                            break;
+                    };
+                    setTimeout(() => {
+                        if (this.badgeStatus === holdValue) {
+                            this.badgeStatus = 0;
+                            this.badgeText = '';
+                        }
+                    }, 1000);
+                }
             },
             observeBulb($event) {
-                this.bulbIsOn = $event.detail.isOn;
+                this.bulbIsOn = $event.detail;
                 this.triggerBulb();
+            },
+            observeMirror($event) {
+                if ($event.details != this.isMirrored) {
+                    this.holdSetup = this.holdSetup.map((row) => row.reverse());
+                    this.isMirrored = !this.isMirrored;
+                    this.triggerBulb();
+                } 
             },
             async triggerBulb() {
                 if (this.bulbIsOn) {
                     try {
                         const response = await  fetch('{{ path('bulb') }}',{
                             method: "POST",
-                            body: this.holdSetupValue
+                            body: JSON.stringify(this.holdSetup)
                         });
                     } catch (error) {
                     }
@@ -64,7 +79,7 @@
         };
     }
 </script>
-<div x-data="initHoldSetup" @bulb.window="observeBulb" class="relative mt-2">
+<div x-data="initHoldSetup({{ rows }}, {{ columns }}, '{{ value }}', {% if edit_mode %}true{% else %}false{% endif %})" @bulb.window="observeBulb" @mirror.window="observeMirror" class="relative mt-2">
     {% for rowIndex in 0..rows-1 %}
         <div class="flex flex-row">
             {% for columnIndex in 0..columns-1 %}
@@ -85,14 +100,11 @@
             {% endfor %}
         </div>
     {% endfor %}
-    <span class="hidden inline-flex items-center rounded-full px-2 py-1 text-xs font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
+    <span class="hidden inline-flex items-center rounded-full px-2 py-1 text-md font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
         'hidden': badgeStatus == 0,
         'bg-blue-100 text-blue-700': badgeStatus == 1,
         'bg-red-100 text-red-700': badgeStatus == 2,
         'bg-yellow-100 text-yellow-700': badgeStatus == 3,
         'bg-green-100 text-green-700': badgeStatus == 4
     }" x-text="badgeText"></span>
-    {% if form_input %}
-        <input type="hidden" {{ widget_attributes_content }} :value="holdSetupValue">
-    {% endif %}
 </div>
