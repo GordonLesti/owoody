@@ -15,7 +15,6 @@
             badgeText: '',
             init() {
                 this.holdSetup = (holdSetup === '' || holdSetup === '[]') ? this.createEmptyHoldSetup() : JSON.parse(holdSetup);
-                console.log(this.holdSetup);
                 this.$dispatch('hold-setup-change', this.holdSetup);
                 this.triggerBulb();
             },
