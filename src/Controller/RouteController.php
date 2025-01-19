@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Route as EntityRoute;
+use App\Enum\Fontainebleau;
 use App\Form\RouteType;
 use App\Repository\RouteRepository;
 use App\Repository\SettingRepository;
@@ -21,7 +22,8 @@ final class RouteController extends AbstractController
     public function index(RouteRepository $routeRepository): Response
     {
         return $this->render('route/index.html.twig', [
-            'routes' => $routeRepository->findAll()
+            'routes' => $routeRepository->findAll(),
+            'grades' => Fontainebleau::cases(),
         ]);
     }
 

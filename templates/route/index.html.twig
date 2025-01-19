@@ -10,26 +10,105 @@
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
     </svg>
 </button>
+{% include 'button/filter.html.twig' %}
 {% endblock %}
 
 {% block main %}
 <div class="mx-auto max-w-2xl pb-12">
-    <ul role="list" class="divide-y divide-gray-100">
-        {% for route in routes %}
-          <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
-              <div class="overflow-auto">
-                  <p class="text-sm/6 font-semibold text-gray-900 text-nowrap overflow-hidden text-ellipsis">
-                      <a href="{{ path('route_view', {id: route.id}) }}" class="hover:underline">{{ route.name }}</a>
-                  </p>
-                  <div class="mt-1 items-center text-xs/5 text-gray-500">
-                      <p><time datetime="{{ route.createdAt|date('Y-m-d') }}">{{ route.createdAt|date }}</time></p>
-                  </div>
-              </div>
-              <div class="w-auto">
-                  <p class="text-sm/6 text-gray-900">{{ route.grade.value }}</p>
-              </div>
-          </li>
-        {%endfor %}
+    <script>
+        function initRouteList()
+        {
+            return {
+                routes: {{ routes|json_encode|raw }}.map((route) => {
+                    route['created_at'] = new Date(route['created_at'].date);
+                    return route;
+                }),
+                filteredRoutes: [],
+                init() {
+                    {% for index, route in routes %}
+                        this.routes[{{ index }}]['link'] = "{{ path('route_view', {id: route.id}) }}";
+                    {% endfor %}
+                    this.updateFilteredRoutes();
+                },
+                grades: {{ grades|json_encode|raw }},
+                updateFilteredRoutes() {
+                    this.filteredRoutes = this.routes.filter((route) => {
+                        const routeGradeIndex = this.grades.indexOf(route.grade);
+                        const minGradeIndex = this.grades.indexOf(this.minGrade);
+                        const maxGradeIndex = this.grades.indexOf(this.maxGrade);
+                        return routeGradeIndex >= minGradeIndex && routeGradeIndex <= maxGradeIndex;
+                    }).sort((a, b) => {
+                        if (this.sortBy == 'newest' || this.sortBy == 'oldest') {
+                            var factor = 1;
+                            if (this.sortBy == 'oldest') {
+                                factor = -1;
+                            }
+                            if (a['created_at'] < b['created_at']) {
+                                return 1 * factor;
+                            } else if (a['created_at'] > b['created_at']) {
+                                return -1 * factor;
+                            }
+                            return 0;
+                        }
+                        if (this.sortBy == 'hardest' || this.sortBy == 'easiest') {
+                            var factor = 1;
+                            if (this.sortBy == 'easiest') {
+                                factor = -1;
+                            }
+                            const aGradeIndex = this.grades.indexOf(a.grade);
+                            const bGradeIndex = this.grades.indexOf(b.grade);
+                            if (aGradeIndex < bGradeIndex) {
+                                return 1 * factor;
+                            } else if (aGradeIndex > bGradeIndex) {
+                                return -1 * factor;
+                            }
+                            return 0;
+                        }
+                    });
+                },
+                observeFilter($event) {
+                    this.minGrade = $event.detail.minGrade;
+                    this.maxGrade = $event.detail.maxGrade;
+                    this.sortBy = $event.detail.sortBy;
+                    this.updateFilteredRoutes();
+                },
+                minGrade: Alpine.$persist("{{ grades[0].value }}"),
+                maxGrade: Alpine.$persist("{{ grades[grades|length-1].value }}"),
+                sortBy: Alpine.$persist("newest")
+            }
+        }
+    </script>
+    <ul x-data="initRouteList()" @filter.window="observeFilter" role="list" class="divide-y divide-gray-100">
+        <template x-for="route in filteredRoutes">
+            <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
+                <div class="overflow-auto">
+                    <p class="text-sm/6 font-semibold text-gray-900 text-nowrap overflow-hidden text-ellipsis">
+                        <a :href="route.link" class="hover:underline" x-text="route.name"></a>
+                    </p>
+                    <div class="mt-1 items-center text-xs/5 text-gray-500">
+                        <p><time :datetime="route['created_at'].toISOString()" x-text="route['created_at'].toDateString()"></time></p>
+                    </div>
+                </div>
+                <div class="w-auto">
+                    <p class="text-sm/6 text-gray-900" x-text="route.grade"></p>
+                </div>
+            </li>
+        </template>
+        <!-- {% for route in routes %}
+            <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
+                <div class="overflow-auto">
+                    <p class="text-sm/6 font-semibold text-gray-900 text-nowrap overflow-hidden text-ellipsis">
+                        <a href="{{ path('route_view', {id: route.id}) }}" class="hover:underline">{{ route.name }}</a>
+                    </p>
+                    <div class="mt-1 items-center text-xs/5 text-gray-500">
+                        <p><time datetime="{{ route.createdAt|date('Y-m-d') }}">{{ route.createdAt|date }}</time></p>
+                    </div>
+                </div>
+                <div class="w-auto">
+                    <p class="text-sm/6 text-gray-900">{{ route.grade.value }}</p>
+                </div>
+            </li>
+        {%endfor %} -->
     </ul>
 </div>
 {% endblock %}

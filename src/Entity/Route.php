@@ -7,10 +7,11 @@ use App\Repository\RouteRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: RouteRepository::class)]
-class Route
+class Route implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -134,5 +135,18 @@ class Route
         if ($this->createdAt === null) {
             $this->createdAt = new DateTimeImmutable();
         }
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'hold_setup' => $this->holdSetup,
+            'name' => $this->name,
+            'grade' => $this->grade,
+            'note' => $this->note,
+            'created_at' => $this->createdAt,
+            'updated_at' => $this->updatedAt,
+        ];
     }
 }
