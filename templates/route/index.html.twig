@@ -32,10 +32,14 @@
                 },
                 grades: {{ grades|json_encode|raw }},
                 updateFilteredRoutes() {
+                    const lowerName = this.name.toLowerCase();
+                    const minGradeIndex = this.grades.indexOf(this.minGrade);
+                    const maxGradeIndex = this.grades.indexOf(this.maxGrade);
                     this.filteredRoutes = this.routes.filter((route) => {
+                        if (this.name != "" && !route.name.toLowerCase().includes(lowerName)) {
+                            return false;
+                        }
                         const routeGradeIndex = this.grades.indexOf(route.grade);
-                        const minGradeIndex = this.grades.indexOf(this.minGrade);
-                        const maxGradeIndex = this.grades.indexOf(this.maxGrade);
                         return routeGradeIndex >= minGradeIndex && routeGradeIndex <= maxGradeIndex;
                     }).sort((a, b) => {
                         if (this.sortBy == 'newest' || this.sortBy == 'oldest') {
@@ -67,11 +71,13 @@
                     });
                 },
                 observeFilter($event) {
+                    this.name = $event.detail.name;
                     this.minGrade = $event.detail.minGrade;
                     this.maxGrade = $event.detail.maxGrade;
                     this.sortBy = $event.detail.sortBy;
                     this.updateFilteredRoutes();
                 },
+                name: Alpine.$persist(""),
                 minGrade: Alpine.$persist("{{ grades[0].value }}"),
                 maxGrade: Alpine.$persist("{{ grades[grades|length-1].value }}"),
                 sortBy: Alpine.$persist("newest")
