@@ -85,7 +85,7 @@
         }
     </script>
     <ul x-data="initRouteList()" @filter.window="observeFilter" role="list" class="divide-y divide-gray-100">
-        <template x-for="route in filteredRoutes">
+        <template x-for="route in filteredRoutes" hidden>
             <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
                 <div class="overflow-auto">
                     <p class="text-sm/6 font-semibold text-gray-900 text-nowrap overflow-hidden text-ellipsis">
@@ -100,21 +100,6 @@
                 </div>
             </li>
         </template>
-        <!-- {% for route in routes %}
-            <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
-                <div class="overflow-auto">
-                    <p class="text-sm/6 font-semibold text-gray-900 text-nowrap overflow-hidden text-ellipsis">
-                        <a href="{{ path('route_view', {id: route.id}) }}" class="hover:underline">{{ route.name }}</a>
-                    </p>
-                    <div class="mt-1 items-center text-xs/5 text-gray-500">
-                        <p><time datetime="{{ route.createdAt|date('Y-m-d') }}">{{ route.createdAt|date }}</time></p>
-                    </div>
-                </div>
-                <div class="w-auto">
-                    <p class="text-sm/6 text-gray-900">{{ route.grade.value }}</p>
-                </div>
-            </li>
-        {%endfor %} -->
     </ul>
 </div>
 {% endblock %}

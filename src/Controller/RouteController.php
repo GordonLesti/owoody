@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 final class RouteController extends AbstractController
 {
-    #[Route('/', name: 'route', methods: ['GET'])]
+    #[Route('/routes', name: 'route', methods: ['GET'])]
     public function index(RouteRepository $routeRepository): Response
     {
         return $this->render('route/index.html.twig', [
