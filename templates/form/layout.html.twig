@@ -5,6 +5,11 @@
     {{- parent() -}}
 {%- endblock form_row -%}
 
+{%- block checkbox_row -%}
+    {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-8')) }) -%}
+    {{- parent() -}}
+{%- endblock checkbox_row -%}
+
 {%- block form_label -%}
     {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('block text-sm/6 font-medium text-gray-900')) }) -%}
     {{- parent() -}}

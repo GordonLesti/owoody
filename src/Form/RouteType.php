@@ -30,8 +30,8 @@ final class RouteType extends AbstractType
             'label' => 'Hold Setup',
             'mapped' => true,
             'required' => true,
-            'rows' => $setting !== null ? $setting->getRows() : 0,
-            'columns' => $setting !== null ? $setting->getColumns() : 0,
+            'rows' => $setting !== null ? $setting->getRowCount() : 0,
+            'columns' => $setting !== null ? $setting->getColumnCount() : 0,
             'invalid_message' => 'The hold setup is invalid.',
         ])->add('name', TextType::class, [
             'label' => 'Name',

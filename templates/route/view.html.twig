@@ -24,10 +24,14 @@
         {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
     </div>
     <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900">Name</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.name }}</dd>
+    </div>
+    <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
         <dt class="text-sm/6 font-medium text-gray-900">Grade</dt>
         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.grade.value }}</dd>
     </div>
-        <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+    <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
         <dt class="text-sm/6 font-medium text-gray-900">Created At</dt>
         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.createdAt|date }}</dd>
     </div>

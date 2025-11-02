@@ -15,12 +15,12 @@ final class SettingType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('rows', IntegerType::class, [
+        $builder->add('row_count', IntegerType::class, [
             'label' => 'Rows',
             'mapped' => true,
             'required' => true,
             'help' => 'The number of rows on the board.',
-        ])->add('columns', IntegerType::class, [
+        ])->add('column_count', IntegerType::class, [
             'label' => 'Columns',
             'mapped' => true,
             'required' => true,

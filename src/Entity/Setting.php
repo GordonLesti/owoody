@@ -22,11 +22,11 @@ class Setting
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\Positive]
-    private ?int $rows = null;
+    private ?int $rowCount = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     #[Assert\Positive]
-    private ?int $columns = null;
+    private ?int $columnCount = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isSymmetric = false;
@@ -58,26 +58,26 @@ class Setting
         return $this;
     }
 
-    public function getRows(): ?int
+    public function getRowCount(): ?int
     {
-        return $this->rows;
+        return $this->rowCount;
     }
 
-    public function setRows(int $rows): static
+    public function setRowCount(int $rowCount): static
     {
-        $this->rows = $rows;
+        $this->rowCount = $rowCount;
 
         return $this;
     }
 
-    public function getColumns(): ?int
+    public function getColumnCount(): ?int
     {
-        return $this->columns;
+        return $this->columnCount;
     }
 
-    public function setColumns(int $columns): static
+    public function setColumnCount(int $columnCount): static
     {
-        $this->columns = $columns;
+        $this->columnCount = $columnCount;
 
         return $this;
     }
