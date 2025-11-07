@@ -30,6 +30,11 @@ final class SettingType extends AbstractType
             'mapped' => true,
             'required' => true,
             'help' => 'Is the hold layout of the board symmetric.',
+        ])->add('is_adjustable', CheckboxType::class, [
+            'label' => 'Adjustable Angle',
+            'mapped' => true,
+            'required' => true,
+            'help' => 'Is the angle of the board adjustable.',
         ]);
     }
 

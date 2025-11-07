@@ -31,6 +31,9 @@ class Setting
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isSymmetric = false;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isAdjustable = false;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?DateTimeImmutable $createdAt = null;
 
@@ -90,6 +93,18 @@ class Setting
     public function setIsSymmetric(bool $isSymmetric): static
     {
         $this->isSymmetric = $isSymmetric;
+
+        return $this;
+    }
+
+    public function isAdjustable(): bool
+    {
+        return $this->isAdjustable;
+    }
+
+    public function setIsAdjustable(bool $isAdjustable): static
+    {
+        $this->isAdjustable = $isAdjustable;
 
         return $this;
     }

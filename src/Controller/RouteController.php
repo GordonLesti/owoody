@@ -19,11 +19,17 @@ use Symfony\Component\Routing\Requirement\Requirement;
 final class RouteController extends AbstractController
 {
     #[Route('/routes', name: 'route', methods: ['GET'])]
-    public function index(RouteRepository $routeRepository): Response
+    public function index(RouteRepository $routeRepository, SettingRepository $settingRepository): Response
     {
+        $setting = $settingRepository->getLatestSetting();
+        $isAdjustable = false;
+        if ($setting !== null) {
+            $isAdjustable = $setting->isAdjustable();
+        }
         return $this->render('route/index.html.twig', [
             'routes' => $routeRepository->findAll(),
             'grades' => Fontainebleau::cases(),
+            'is_adjustable' => $isAdjustable,
         ]);
     }
 

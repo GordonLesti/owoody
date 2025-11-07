@@ -1,0 +1,29 @@
+{% if is_adjustable %}
+<script>
+    function initAngleButton()
+    {
+        return {
+            angle: Alpine.$persist(0),
+            angleMenuOpen: false,
+            changeAngle(angle) {
+                this.angle = angle;
+            }
+        }
+    }
+</script>
+<div x-data="initAngleButton()" @click.away="angleMenuOpen = false">
+    <button @click="angleMenuOpen = !angleMenuOpen" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
+        <span class="absolute -inset-1.5"></span>
+        <span class="sr-only">Angle</span>
+        <div class="size-6" x-text="angle + '°'"></div>
+    </button>
+    <div x-show="angleMenuOpen" class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="more-menu-button" tabindex="-1" x-cloak>
+        {% for i in 0..14 %}
+            <a href="#" @click="changeAngle({{ i * 5 }}); angleMenuOpen = false; return false;" class="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:outline-hidden" role="menuitem" tabindex="-1" id="menu-item-6">
+                <!-- Active: "text-gray-500", Not Active: "" -->
+                <span class="mr-3 size-5" :class="angle === {{ i * 5 }} ? 'text-gray-500' : 'text-gray-400'">{{ i * 5 }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
