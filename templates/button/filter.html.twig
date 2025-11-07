@@ -86,9 +86,9 @@
                             <div class="sm:col-span-3">
                                 <label for="min_grade" class="block text-sm/6 font-medium text-gray-900">Minimum Grade</label>
                                 <div class="mt-2 grid grid-cols-1">
-                                    <select id="min_grade" name="min_grade" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
+                                    <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                         {% for grade in grades %}
-                                            <option @click="changeValue('minGrade', '{{ grade.value }}')" :selected="minGrade == '{{ grade.value }}'">{{ grade.value }}</option>
+                                            <option :selected="minGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                         {% endfor %}
                                     </select>
                                     <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -99,9 +99,9 @@
                             <div class="sm:col-span-3">
                                 <label for="max_grade" class="block text-sm/6 font-medium text-gray-900">Maximum Grade</label>
                                 <div class="mt-2 grid grid-cols-1">
-                                    <select id="max_grade" name="max_grade" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
+                                    <select id="max_grade" name="max_grade" @change="changeValue('maxGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                         {% for grade in grades %}
-                                            <option @click="changeValue('maxGrade', '{{ grade.value }}')" :selected="maxGrade == '{{ grade.value }}'">{{ grade.value }}</option>
+                                            <option :selected="maxGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                         {% endfor %}
                                     </select>
                                     <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -112,10 +112,10 @@
                             <div class="sm:col-span-3">
                                 <label for="sort_by" class="block text-sm/6 font-medium text-gray-900">Sort By</label>
                                 <div class="mt-2 grid grid-cols-1">
-                                    <select id="sort_by" name="sort_by" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
+                                    <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                         {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}] %}
                                         {% for sorting in sortBy %}
-                                            <option @click="changeValue('sortBy', '{{ sorting.value }}')" :selected="sortBy == '{{ sorting.value }}'">{{ sorting.label }}</option>
+                                            <option :selected="sortBy == '{{ sorting.value }}'">{{ sorting.label }}</option>
                                         {% endfor %}
                                     </select>
                                     <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
