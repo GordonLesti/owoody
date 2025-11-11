@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block navigation_button %}
-<button type="button" @click="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primery-500">
+<button type="button" @click="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md bg-fuchsia-600 p-2 text-fuchsia-200 hover:bg-fuchsia-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-fuchsia-800 dark:hover:bg-fuchsia-700/75">
     <span class="absolute -inset-0.5"></span>
     <span class="sr-only">Back to Routes</span>
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -19,26 +19,26 @@
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl pb-5 divide-y divide-gray-100">
+<div class="mx-auto max-w-2xl pb-5 divide-y divide-gray-200 dark:divide-white/10">
     <div class="pb-6 pt-4">
         {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
     </div>
-    <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900">Name</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.name }}</dd>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Name</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.name }}</dd>
     </div>
-    <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900">Grade</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.grade.value }}</dd>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Grade</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.grade.value }}</dd>
     </div>
-    <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900">Created At</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.createdAt|date }}</dd>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Created At</dt>
+        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.createdAt|date }}</dd>
     </div>
     {% if route_entity.note %}
-        <div class="py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm/6 font-medium text-gray-900">Note</dt>
-            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">{{ route_entity.note }}</dd>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Note</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.note }}</dd>
         </div>
     {% endif %}
 </div>

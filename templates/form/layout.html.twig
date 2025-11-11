@@ -11,22 +11,22 @@
 {%- endblock checkbox_row -%}
 
 {%- block form_label -%}
-    {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('block text-sm/6 font-medium text-gray-900')) }) -%}
+    {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('block text-sm/6 font-medium text-gray-900 dark:text-white')) }) -%}
     {{- parent() -}}
 {%- endblock form_label -%}
 
 {%- block form_widget_simple -%}
-    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6 mt-2')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-fuchsia-500')) ~ (disabled ? ' ' ~ widget_disabled_class|default('cursor-not-allowed bg-gray-50 text-gray-500 outline-gray-200 dark:bg-white/10 dark:text-gray-500 dark:outline-white/5')) ~ (errors|length ? ' ' ~ widget_errors_class|default('text-red-900 outline-red-300 placeholder:text-red-300 focus:outline-red-600 dark:text-red-400 dark:outline-red-500/50 dark:placeholder:text-red-400/70 dark:focus:outline-red-400')) }) -%}
     {{- parent() -}}
 {%- endblock form_widget_simple -%}
 
 {%- block textarea_widget -%}
-    {%- set attr = attr|merge({ rows: 3, class: attr.class|default(widget_class|default('block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6 mt-2')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
+    {%- set attr = attr|merge({ rows: 3, class: attr.class|default(widget_class|default('block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-fuchsia-500')) ~ (disabled ? ' ' ~ widget_disabled_class|default('cursor-not-allowed bg-gray-50 text-gray-500 outline-gray-200 dark:bg-white/10 dark:text-gray-500 dark:outline-white/5')) ~ (errors|length ? ' ' ~ widget_errors_class|default('text-red-900 outline-red-300 placeholder:text-red-300 focus:outline-red-600 dark:text-red-400 dark:outline-red-500/50 dark:placeholder:text-red-400/70 dark:focus:outline-red-400')) }) -%}
     {{- parent() -}}
 {%- endblock textarea_widget -%}
 
 {%- block choice_widget_collapsed -%}
-    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus-visible:outline-fuchsia-500')) ~ (disabled ? ' ' ~ widget_disabled_class|default('cursor-not-allowed bg-gray-50 text-gray-500 outline-gray-200 dark:bg-white/10 dark:text-gray-500 dark:outline-white/5')) ~ (errors|length ? ' ' ~ widget_errors_class|default('text-red-900 outline-red-300 placeholder:text-red-300 focus:outline-red-600 dark:text-red-400 dark:outline-red-500/50 dark:placeholder:text-red-400/70 dark:focus:outline-red-400')) }) -%}
     <div class="mt-2 grid grid-cols-1">
         {{- parent() -}}
         <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -36,17 +36,17 @@
 {%- endblock choice_widget_collapsed -%}
 
 {%- block form_help -%}
-    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('mt-3 text-sm/6 text-gray-600')) }) -%}
+    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('mt-2 text-sm text-gray-500 dark:text-gray-400')) }) -%}
     {{- parent() -}}
 {%- endblock form_help -%}
 
 {%- block checkbox_widget -%}
-    {%- set widget_class = widget_class|default('col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-primery-600 checked:bg-primery-600 indeterminate:border-primery-600 indeterminate:bg-primery-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primery-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto') -%}
+    {%- set widget_class = widget_class|default('col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-fuchsia-600 checked:bg-fuchsia-600 indeterminate:border-fuchsia-600 indeterminate:bg-fuchsia-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-fuchsia-500 dark:checked:bg-fuchsia-500 dark:indeterminate:border-fuchsia-500 dark:indeterminate:bg-fuchsia-500 dark:focus-visible:outline-fuchsia-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto') -%}
     <div class="group grid size-4 grid-cols-1 mr-3">
         <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-            <path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
+            <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
+            <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
         </svg>
     </div>
 {%- endblock checkbox_widget -%}
