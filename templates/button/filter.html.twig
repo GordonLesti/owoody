@@ -2,10 +2,6 @@
     function initFilterButton()
     {
         return {
-            filterOpen: false,
-            clickFilterButton() {
-                this.filterOpen = true;
-            },
             changeValue(key, value) {
                 this[key] = value;
                 this.dispatch();
@@ -31,52 +27,40 @@
     }
 </script>
 <div x-data="initFilterButton()">
-    <button @click="clickFilterButton" class="relative rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
+    <button @click="$refs.filterDialog.show()" class="relative rounded-full p-1 text-primery-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
         <span class="absolute -inset-1.5"></span>
         <span class="sr-only">Filter</span>
         <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
         </svg>
     </button>
-    <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true" x-show="filterOpen" x-cloak>
-        <!-- Background backdrop, show/hide based on slide-over state. -->
-        <div class="fixed inset-0"></div>
 
-        <div class="fixed inset-0 overflow-hidden">
-            <div class="absolute inset-0 overflow-hidden">
-            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-                <!--
-                Slide-over panel, show/hide based on slide-over state.
-
-                Entering: "transform transition ease-in-out duration-500 sm:duration-700"
-                    From: "translate-x-full"
-                    To: "translate-x-0"
-                Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
-                    From: "translate-x-0"
-                    To: "translate-x-full"
-                -->
-                <div class="pointer-events-auto w-screen max-w-md" @click.away="filterOpen = false" x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700" x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0" x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700" x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full">
-                <div class="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+    {# https://tailwindcss.com/plus/ui-blocks/application-ui/overlays/drawers#component-05a1aec573d7b5cd3909323c6db6723f #}
+    <dialog x-ref="filterDialog" aria-labelledby="drawer-title" class="z-10 fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent not-open:hidden backdrop:bg-transparent">
+        <div class="absolute inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-closed:opacity-0 dark:bg-gray-900/50"></div>
+        <div tabindex="0" class="absolute inset-0 pl-10 focus:outline-none sm:pl-16">
+            <div class="ml-auto block size-full max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700">
+                <div class="relative flex h-full flex-col overflow-y-auto bg-white py-6 shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10">
                     <div class="px-4 sm:px-6">
-                    <div class="flex items-start justify-between">
-                        <h2 class="text-base font-semibold text-gray-900" id="slide-over-title">Filter &amp; Sort</h2>
-                        <div class="ml-3 flex h-7 items-center">
-                        <button @click="filterOpen = false" type="button" class="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primery-500 focus:ring-offset-2">
-                            <span class="absolute -inset-2.5"></span>
-                            <span class="sr-only">Close panel</span>
-                            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                        <div class="flex items-start justify-between">
+                            <h2 id="drawer-title" class="text-base font-semibold text-gray-900 dark:text-white">Filter &amp; Sort</h2>
+                            <div class="ml-3 flex h-7 items-center">
+                                <button @click="$refs.filterDialog.close()" type="button" class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500">
+                                    <span class="absolute -inset-2.5"></span>
+                                    <span class="sr-only">Close panel</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
+                                        <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6">
-                        <div class="border-b border-gray-900/10 pb-12">
-                            <div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                {# https://tailwindui.com/components/application-ui/forms/form-layouts#component-1c3f9860d66ce5cd9fb35ba7fde6721a #}
+                        {# https://tailwindcss.com/plus/ui-blocks/application-ui/forms/form-layouts#component-1c3f9860d66ce5cd9fb35ba7fde6721a #}
+                        <div class="border-b border-gray-900/10 pb-12 dark:border-white/10">
+                            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 <div class="sm:col-span-4">
-                                    <label for="name" class="block text-sm/6 font-medium text-gray-900">Name</label>
+                                    <label for="name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Name</label>
                                     <div class="mt-2 grid grid-cols-1">
                                         <input @input="changeName" id="name" name="name" type="text" :value="name" class="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-3 pr-10 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:pr-9 sm:text-sm/6">
                                         <svg @click="changeValue('name', '')" x-show="name != ''" class="cursor-pointer col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-gray-400 sm:size-4" viewBox="0 0 16 16" fill="currentColor" class="size-4" x-cloak>
@@ -85,7 +69,7 @@
                                     </div>
                                 </div>
                                 <div class="sm:col-span-3">
-                                    <label for="min_grade" class="block text-sm/6 font-medium text-gray-900">Minimum Grade</label>
+                                    <label for="min_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Minimum Grade</label>
                                     <div class="mt-2 grid grid-cols-1">
                                         <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                             {% for grade in grades %}
@@ -98,7 +82,7 @@
                                     </div>
                                 </div>
                                 <div class="sm:col-span-3">
-                                    <label for="max_grade" class="block text-sm/6 font-medium text-gray-900">Maximum Grade</label>
+                                    <label for="max_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Maximum Grade</label>
                                     <div class="mt-2 grid grid-cols-1">
                                         <select id="max_grade" name="max_grade" @change="changeValue('maxGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                             {% for grade in grades %}
@@ -111,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="sm:col-span-3">
-                                    <label for="sort_by" class="block text-sm/6 font-medium text-gray-900">Sort By</label>
+                                    <label for="sort_by" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Sort By</label>
                                     <div class="mt-2 grid grid-cols-1">
                                         <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-primery-600 sm:text-sm/6">
                                             {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}] %}
@@ -131,9 +115,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
-            </div>
             </div>
         </div>
-    </div>
+    </dialog>
 </div>

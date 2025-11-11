@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primery: colors.pink
+        primery: colors.fuchsia
       }
     },
   },
