@@ -100,7 +100,7 @@
                                         <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-fuchsia-500">
                                             {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}] %}
                                             {% for sorting in sortBy %}
-                                                <option :selected="sortBy == '{{ sorting.value }}'">{{ sorting.label }}</option>
+                                                <option :selected="sortBy == '{{ sorting.value }}'" value="{{ sorting.value }}">{{ sorting.label }}</option>
                                             {% endfor %}
                                         </select>
                                         <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
