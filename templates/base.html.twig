@@ -22,7 +22,7 @@
             <nav class="bg-fuchsia-600 dark:bg-fuchsia-800" x-data="{ open: false }">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="relative flex h-16 items-center justify-between">
-                        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                        <div class="absolute inset-y-0 left-0 flex items-center md:hidden">
                             {% block navigation_button %}
                                 <button @click="open = !open" x-bind:aria-expanded="open.toString()" type="button" class="relative inline-flex items-center justify-center rounded-md bg-fuchsia-600 p-2 text-fuchsia-200 hover:bg-fuchsia-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-fuchsia-800 dark:hover:bg-fuchsia-700/75">
                                     <span class="absolute -inset-0.5"></span>
