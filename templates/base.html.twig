@@ -37,11 +37,8 @@
                             {% endblock %}
                         </div>
                         <div class="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-                            <div class="flex shrink-0 items-center">
-                                <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=fuchsia&shade=300" alt="Your Company" class="size-8" />
-                            </div>
                             <div class="hidden md:block">
-                                <div class="ml-10 flex items-baseline space-x-4">
+                                <div class="flex items-baseline space-x-4">
                                     {% for entry in navigation_entries %}
                                         {% if route starts with entry.route %}
                                             <a href="{{ path(entry.route) }}" aria-current="page" class="rounded-md bg-fuchsia-700 px-3 py-2 text-sm font-medium text-white dark:bg-fuchsia-950/40">{{ entry.label }}</a>

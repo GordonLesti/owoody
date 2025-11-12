@@ -19,8 +19,8 @@
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl pb-5 divide-y divide-gray-200 dark:divide-white/10">
-    <div class="pb-6 pt-4">
+<div class="mx-auto max-w-2xl divide-y divide-gray-200 dark:divide-white/10">
+    <div class="pb-6">
         {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
     </div>
     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
