@@ -27,7 +27,7 @@
     }
 </script>
 <div x-data="initFilterButton()">
-    <button @click="$refs.filterDialog.show()" class="relative rounded-full p-1 text-fuchsia-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
+    <button @click="$refs.filterDialog.show()" class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
         <span class="absolute -inset-1.5"></span>
         <span class="sr-only">Filter</span>
         <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -45,7 +45,7 @@
                         <div class="flex items-start justify-between">
                             <h2 id="drawer-title" class="text-base font-semibold text-gray-900 dark:text-white">Filter &amp; Sort</h2>
                             <div class="ml-3 flex h-7 items-center">
-                                <button @click="$refs.filterDialog.close()" type="button" class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600 dark:hover:text-white dark:focus-visible:outline-fuchsia-500">
+                                <button @click="$refs.filterDialog.close()" type="button" class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:hover:text-white dark:focus-visible:outline-emerald-500">
                                     <span class="absolute -inset-2.5"></span>
                                     <span class="sr-only">Close panel</span>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
@@ -62,7 +62,7 @@
                                 <div class="sm:col-span-4">
                                     <label for="name" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Name</label>
                                     <div class="mt-2 grid grid-cols-1">
-                                        <input @input="changeName" id="name" name="name" type="text" :value="name" class="col-start-1 row-start-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-fuchsia-500">
+                                        <input @input="changeName" id="name" name="name" type="text" :value="name" class="col-start-1 row-start-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-emerald-500">
                                         <svg @click="changeValue('name', '')" x-show="name != ''" class="cursor-pointer col-start-1 row-start-1 mr-3 size-5 self-center justify-self-end text-gray-400 sm:size-4" viewBox="0 0 16 16" fill="currentColor" class="size-4" x-cloak>
                                             <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                                         </svg>
@@ -71,7 +71,7 @@
                                 <div class="sm:col-span-3">
                                     <label for="min_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Minimum Grade</label>
                                     <div class="mt-2 grid grid-cols-1">
-                                        <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-fuchsia-500">
+                                        <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
                                             {% for grade in grades %}
                                                 <option :selected="minGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                             {% endfor %}
@@ -84,7 +84,7 @@
                                 <div class="sm:col-span-3">
                                     <label for="max_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Maximum Grade</label>
                                     <div class="mt-2 grid grid-cols-1">
-                                        <select id="max_grade" name="max_grade" @change="changeValue('maxGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-fuchsia-500">
+                                        <select id="max_grade" name="max_grade" @change="changeValue('maxGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
                                             {% for grade in grades %}
                                                 <option :selected="maxGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                             {% endfor %}
@@ -97,7 +97,7 @@
                                 <div class="sm:col-span-3">
                                     <label for="sort_by" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Sort By</label>
                                     <div class="mt-2 grid grid-cols-1">
-                                        <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-fuchsia-500">
+                                        <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
                                             {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}] %}
                                             {% for sorting in sortBy %}
                                                 <option :selected="sortBy == '{{ sorting.value }}'" value="{{ sorting.value }}">{{ sorting.label }}</option>
