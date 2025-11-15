@@ -13,6 +13,7 @@
 {% block navigation_title %}Add Route{% endblock %}
 
 {% block navigation_buttons %}
+{% include 'button/angle.html.twig' %}
 {% include 'button/bulb.html.twig' %}
 <button @click="document.getElementById('hold_setup_form').submit()" type="button" class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
     <span class="absolute -inset-1.5"></span>

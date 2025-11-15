@@ -38,18 +38,25 @@ final class RouteController extends AbstractController
     {
         $setting = $settingRepository->getLatestSetting();
         $isSymmetric = false;
+        $isAdjustable = false;
         if ($setting !== null) {
             $isSymmetric = $setting->isSymmetric();
+            $isAdjustable = $setting->isAdjustable();
         }
         return $this->render('route/view.html.twig', [
             'route_entity' => $route,
             'is_symmetric' => $isSymmetric,
+            'is_adjustable' => $isAdjustable,
         ]);
     }
 
     #[Route('/routes/{id:route}/edit', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        EntityRoute $route,
+        EntityManagerInterface $entityManager,
+        SettingRepository $settingRepository
+    ): Response {
         $form = $this->createForm(RouteType::class, $route, [
             'method' => 'POST',
             'action' => $this->generateUrl('route_edit', ['id' => $route->getId()]),
@@ -66,15 +73,24 @@ final class RouteController extends AbstractController
 
             return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
+        $setting = $settingRepository->getLatestSetting();
+        $isAdjustable = false;
+        if ($setting !== null) {
+            $isAdjustable = $setting->isAdjustable();
+        }
         return $this->render('route/edit.html.twig', [
             'form' => $form,
             'route_entity' => $route,
+            'is_adjustable' => $isAdjustable,
         ]);
     }
 
     #[Route('/routes/new', name: 'route_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SettingRepository $settingRepository
+    ): Response {
         $route = new EntityRoute();
         $form = $this->createForm(RouteType::class, $route, [
             'method' => 'POST',
@@ -92,8 +108,14 @@ final class RouteController extends AbstractController
 
             return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
+        $setting = $settingRepository->getLatestSetting();
+        $isAdjustable = false;
+        if ($setting !== null) {
+            $isAdjustable = $setting->isAdjustable();
+        }
         return $this->render('route/new.html.twig', [
             'form' => $form,
+            'is_adjustable' => $isAdjustable,
         ]);
     }
 
