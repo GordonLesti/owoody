@@ -1,4 +1,4 @@
-{% if true or app.request.hasPreviousSession %}
+{% if app.request.hasPreviousSession %}
 <script>
     function initFlashMessages() {
         return {
@@ -7,6 +7,9 @@
             currentMessageType: '',
             messages: [],
             init() {
+                {% if error is defined and error %}
+                    this.messages.push({text: "{{ error.messageKey|trans(error.messageData, 'security') }}", type: "error"});
+                {% endif %}
                 {% for type, messages in app.flashes %}
                     {% for message in messages %}
                     this.messages.push({text: "{{ message }}", type: "{{ type }}"});
@@ -36,8 +39,11 @@
         <div class="p-4">
             <div class="flex items-start">
                 <div class="shrink-0">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-green-400">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-green-400" x-show="currentMessageType === 'success'" x-cloak>
                         <path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-slot="icon" aria-hidden="true" class="size-6 text-red-400"  x-show="currentMessageType === 'error'" x-cloak>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                 </div>
                 <div class="ml-3 w-0 flex-1 pt-0.5">
