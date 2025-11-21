@@ -31,6 +31,9 @@ class Route implements JsonSerializable
     #[ORM\Column(nullable: true, type: Types::TEXT)]
     private ?string $note = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'routes')]
+    private User $routeSetter;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -103,6 +106,18 @@ class Route implements JsonSerializable
         return $this;
     }
 
+    public function getRouteSetter(): ?User
+    {
+        return $this->routeSetter;
+    }
+
+    public function setRouteSetter(User $routeSetter): static
+    {
+        $this->routeSetter = $routeSetter;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -145,6 +160,7 @@ class Route implements JsonSerializable
             'name' => $this->name,
             'grade' => $this->grade,
             'note' => $this->note,
+            'route_setter' => $this->routeSetter,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
         ];

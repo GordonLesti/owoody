@@ -94,7 +94,11 @@
                     <p class="text-sm/6 font-semibold text-gray-900 dark:text-white text-nowrap overflow-hidden text-ellipsis">
                         <a :href="route.link" class="hover:underline" x-text="route.name"></a>
                     </p>
-                    <div class="mt-1 items-center text-xs/5 text-gray-500 dark:text-gray-400">
+                    <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
+                        <p x-text="route['route_setter'].user_identifier"></p>
+                        <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
+                            <circle r="1" cx="1" cy="1" />
+                        </svg>
                         <p><time :datetime="route['created_at'].toISOString()" x-text="route['created_at'].toDateString()"></time></p>
                     </div>
                 </div>

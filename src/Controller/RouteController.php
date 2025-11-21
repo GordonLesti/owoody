@@ -101,6 +101,7 @@ final class RouteController extends AbstractController
                 'id' => 'hold_setup_form',
             ],
         ]);
+        $route->setRouteSetter($this->getUser());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
