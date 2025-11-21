@@ -9,12 +9,17 @@
 
         return {
             bulbIsOn: Alpine.$persist(false),
-            isMirrored: false,
+            isMirrored: Alpine.$persist({}),
             holdSetup: [],
             badgeStatus: 0,
             badgeText: '',
             init() {
                 this.holdSetup = (holdSetup === '' || holdSetup === '[]') ? this.createEmptyHoldSetup() : JSON.parse(holdSetup);
+                {% if route_entity is defined %}
+                if (this.isMirrored.hasOwnProperty({{ route_entity.id }}) && this.isMirrored[{{ route_entity.id }}]) {
+                    this.holdSetup = this.holdSetup.map((row) => row.reverse());
+                }
+                {% endif %}
                 this.$dispatch('hold-setup-change', this.holdSetup);
                 this.triggerBulb();
             },
@@ -58,11 +63,13 @@
                 this.triggerBulb();
             },
             observeMirror($event) {
-                if ($event.details != this.isMirrored) {
+                {% if route_entity is defined %}
+                if ($event.details != this.isMirrored[{{ route_entity.id }}]) {
                     this.holdSetup = this.holdSetup.map((row) => row.reverse());
-                    this.isMirrored = !this.isMirrored;
+                    this.isMirrored[{{ route_entity.id }}] = !this.isMirrored[{{ route_entity.id }}];
                     this.triggerBulb();
-                } 
+                }
+                {% endif %}
             },
             async triggerBulb() {
                 if (this.bulbIsOn) {
