@@ -16,6 +16,7 @@
             init() {
                 this.holdSetup = (holdSetup === '' || holdSetup === '[]') ? this.createEmptyHoldSetup() : JSON.parse(holdSetup);
                 {% if route_entity is defined %}
+                this.isMirrored[{{route_entity.id}}] = this.isMirrored[{{route_entity.id}}] ?? false;
                 if (this.isMirrored.hasOwnProperty({{ route_entity.id }}) && this.isMirrored[{{ route_entity.id }}]) {
                     this.holdSetup = this.holdSetup.map((row) => row.reverse());
                 }
