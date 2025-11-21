@@ -21,6 +21,7 @@ final class SettingController extends AbstractController
         SettingRepository $settingRepository,
         EntityManagerInterface $entityManager
     ): Response {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $setting = new Setting();
         $parent = $settingRepository->getLatestSetting();
         if ($parent !== null) {
