@@ -16,35 +16,133 @@
 {% include 'button/angle.html.twig' %}
 {% include 'button/bulb.html.twig' %}
 {% include 'button/mirror.html.twig' %}
+{% if app.user %}
+<button type="button" @click="location.href='{{ path('route_log', {id: route_entity.id}) }}'" class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
+    <span class="absolute -inset-1.5"></span>
+    <span class="sr-only">Log</span>
+    <svg  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+    </svg>
+</button>
+{% endif %}
 {% include 'button/edit.html.twig' %}
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl divide-y divide-gray-200 dark:divide-white/10">
+<div class="mx-auto max-w-2xl" x-data="{activeTab: 'info'}">
     <div class="pb-6">
         {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
     </div>
-    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Name</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.name }}</dd>
-    </div>
-    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Grade</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.grade.value }}</dd>
-    </div>
-    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Route Setter</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.routeSetter.userIdentifier }}</dd>
-    </div>
-    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Created At</dt>
-        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.createdAt|date }}</dd>
-    </div>
-    {% if route_entity.note %}
-        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Note</dt>
-            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.note }}</dd>
+
+    {% set tab_entries = [{'id': 'info', 'label': 'Info'}, {'id': 'logs', 'label': 'Logs'}] %}
+    <div>
+        <div class="grid grid-cols-1 sm:hidden">
+            <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+            <select @change="activeTab = $event.target.value" aria-label="Select a tab" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 dark:bg-white/5 dark:text-gray-100 dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
+            {% for entry in tab_entries %}
+                <option value="{{ entry.id }}" :selected="activeTab == '{{ entry.id }}'">{{ entry.label }}</option>
+            {% endfor %}
+            </select>
+            <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end fill-gray-500 dark:fill-gray-400">
+                <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+            </svg>
         </div>
-    {% endif %}
+        <div class="hidden sm:block">
+            <nav aria-label="Tabs" class="isolate flex divide-x divide-gray-200 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
+                <!-- Current: "text-gray-900 dark:text-white", Default: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white" -->
+                {% for entry in tab_entries %}
+                <a href="#" @click="activeTab = '{{ entry.id }}'" :class="{'text-gray-900 dark:text-white': activeTab == '{{ entry.id }}'}" class="group relative min-w-0 flex-1 overflow-hidden rounded-r-lg px-4 py-4 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:z-10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white">
+                    <span>{{ entry.label }}</span>
+                    <span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 bg-transparent"></span>
+                </a>
+                {% endfor %}
+            </nav>
+        </div>
+    </div>
+
+    <div class="divide-y divide-gray-200 dark:divide-white/10" x-show="activeTab == 'info'" x-cloak>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Name</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.name }}</dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Grade</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.grade.value }}</dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Route Setter</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.routeSetter.userIdentifier }}</dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Created At</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.createdAt|date("D M d o") }}</dd>
+        </div>
+        {% if route_entity.note %}
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Note</dt>
+                <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.note }}</dd>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="flow-root mt-6" x-show="activeTab == 'logs'" x-cloak>
+        <ul role="list" class="-mb-8">
+            {% for entry in route_entity.logs|reverse %}
+            <li>
+                <div class="relative pb-8">
+                    {% if not loop.last %}
+                    <span aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-white/10"></span>
+                    {% endif %}
+                    <div class="relative flex space-x-3">
+                    <div>
+                        <span class="flex size-8 items-center justify-center rounded-full bg-green-500 ring-8 ring-gray-100 dark:ring-gray-900">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
+                                <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                <span class="font-medium text-gray-900 dark:text-white">{{ entry.user.userIdentifier }}</span> sent
+                                <span class="font-medium text-gray-900 dark:text-white">{{ route_entity.name }}</span>
+                                {% if entry.angle %}
+                                    @ <span class="font-medium text-gray-900 dark:text-white">{{ entry.angle }}°</span>
+                                {% endif %}
+                                with <span class="font-medium text-gray-900 dark:text-white">{{ entry.attempts }}</span>
+                                {% if entry.attempts > 1 %}
+                                    attempts.
+                                {% else %}
+                                    attempt.
+                                {% endif %}
+                            </p>
+                            <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
+                            {% if entry.isMirrored %}
+                                <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                    <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                                </svg>
+                            {% endif %}
+                            {{ entry.grade.value }}
+                                <div class="flex items-center">
+                                    {% for i in 1..5 %}
+                                        <span class="{{ entry.rating >= i ? 'text-yellow-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                            <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                                <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                            <time datetime="{{ entry.createdAt|date }}">{{ entry.createdAt|date("D M d o") }}</time>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}

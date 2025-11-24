@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
@@ -37,10 +38,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     #[ORM\OneToMany(targetEntity: Route::class, mappedBy: 'routeSetter')]
     private Collection $routes;
 
-    public function __construct()
-    {
-        $this->routes = new ArrayCollection();
-    }
+    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'user')]
+    private Collection $logs;
 
     public function getId(): ?int
     {
@@ -111,6 +110,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
         return $this->routes;
     }
 
+    public function setRoutes(Collection $routes): static
+    {
+        $this->routes = $routes;
+
+        return $this;
+    }
+
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function setLogs(Collection $logs): static
+    {
+        $this->logs = $logs;
+
+        return $this;
+    }
+
     #[\Deprecated]
     public function eraseCredentials(): void
     {
@@ -122,6 +140,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
         return [
             'id' => $this->id,
             'user_identifier' => $this->username,
+            'routes' => $this->routes,
+            'logs' => $this->logs,
         ];
     }
 }

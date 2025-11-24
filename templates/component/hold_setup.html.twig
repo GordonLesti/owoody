@@ -15,7 +15,7 @@
             badgeText: '',
             init() {
                 this.holdSetup = (holdSetup === '' || holdSetup === '[]') ? this.createEmptyHoldSetup() : JSON.parse(holdSetup);
-                {% if route_entity is defined %}
+                {% if route_entity is defined and route_entity %}
                 this.isMirrored[{{route_entity.id}}] = this.isMirrored[{{route_entity.id}}] ?? false;
                 if (this.isMirrored.hasOwnProperty({{ route_entity.id }}) && this.isMirrored[{{ route_entity.id }}]) {
                     this.holdSetup = this.holdSetup.map((row) => row.reverse());
@@ -64,7 +64,7 @@
                 this.triggerBulb();
             },
             observeMirror($event) {
-                {% if route_entity is defined %}
+                {% if route_entity is defined and route_entity %}
                 if ($event.details != this.isMirrored[{{ route_entity.id }}]) {
                     this.holdSetup = this.holdSetup.map((row) => row.reverse());
                     this.isMirrored[{{ route_entity.id }}] = !this.isMirrored[{{ route_entity.id }}];

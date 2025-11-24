@@ -28,6 +28,7 @@ final class HoldSetupType extends AbstractType
     {
         $view->vars['rows'] = $options['rows'] ?? 0;
         $view->vars['columns'] = $options['columns'] ?? 0;
+        $view->vars['route_entity'] = $options['route_entity'] ?? null;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -35,6 +36,7 @@ final class HoldSetupType extends AbstractType
         $resolver->setDefaults([
             'rows' => 0,
             'columns' => 0,
+            'route_entity' => null,
             'compound' => false,
         ]);
         $resolver->setAllowedTypes('rows', 'int');

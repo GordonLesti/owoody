@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Enum\Fontainebleau;
 use App\Repository\RouteRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
@@ -33,6 +36,9 @@ class Route implements JsonSerializable
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'routes')]
     private User $routeSetter;
+
+    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'route')]
+    private Collection $logs;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -106,7 +112,7 @@ class Route implements JsonSerializable
         return $this;
     }
 
-    public function getRouteSetter(): ?User
+    public function getRouteSetter(): User
     {
         return $this->routeSetter;
     }
@@ -114,6 +120,18 @@ class Route implements JsonSerializable
     public function setRouteSetter(User $routeSetter): static
     {
         $this->routeSetter = $routeSetter;
+
+        return $this;
+    }
+
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function setLogs(Collection $logs): static
+    {
+        $this->logs = $logs;
 
         return $this;
     }
@@ -161,6 +179,7 @@ class Route implements JsonSerializable
             'grade' => $this->grade,
             'note' => $this->note,
             'route_setter' => $this->routeSetter,
+            'logs' => $this->logs,
             'created_at' => $this->createdAt,
             'updated_at' => $this->updatedAt,
         ];

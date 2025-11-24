@@ -33,6 +33,7 @@ final class RouteType extends AbstractType
             'rows' => $setting !== null ? $setting->getRowCount() : 0,
             'columns' => $setting !== null ? $setting->getColumnCount() : 0,
             'invalid_message' => 'The hold setup is invalid.',
+            'route_entity' => $options['route_entity'],
         ])->add('name', TextType::class, [
             'label' => 'Name',
             'mapped' => true,
@@ -56,6 +57,7 @@ final class RouteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Route::class,
+            'route_entity' => null,
         ]);
     }
 }
