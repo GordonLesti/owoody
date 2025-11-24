@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Entity\Route;
-use App\Enum\Fontainebleau;
 use App\Form\Type\HoldSetupType;
 use App\Repository\SettingRepository;
-use BackedEnum;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,14 +35,6 @@ final class RouteType extends AbstractType
             'label' => 'Name',
             'mapped' => true,
             'required' => true,
-        ])->add('grade', EnumType::class, [
-            'label' => 'Grade',
-            'mapped' => true,
-            'required' => false,
-            'class' => Fontainebleau::class,
-            'choice_label' => static function (BackedEnum $choice): string {
-                return (string) $choice->value;
-            },
         ])->add('note', TextareaType::class, [
             'label' => 'Note',
             'mapped' => true,

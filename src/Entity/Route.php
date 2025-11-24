@@ -28,9 +28,6 @@ class Route implements JsonSerializable
     #[ORM\Column(length: 190, unique: true)]
     private ?string $name = null;
 
-    #[ORM\Column(nullable: true, enumType: Fontainebleau::class)]
-    private ?Fontainebleau $grade = null;
-
     #[ORM\Column(nullable: true, type: Types::TEXT)]
     private ?string $note = null;
 
@@ -84,18 +81,6 @@ class Route implements JsonSerializable
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getGrade(): ?Fontainebleau
-    {
-        return $this->grade;
-    }
-
-    public function setGrade(?Fontainebleau $grade): static
-    {
-        $this->grade = $grade;
 
         return $this;
     }
@@ -176,7 +161,6 @@ class Route implements JsonSerializable
             'id' => $this->id,
             'hold_setup' => $this->holdSetup,
             'name' => $this->name,
-            'grade' => $this->grade,
             'note' => $this->note,
             'route_setter' => $this->routeSetter,
             'logs' => $this->logs,

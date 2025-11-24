@@ -34,6 +34,19 @@
                     this.updateFilteredRoutes();
                 },
                 grades: {{ grades|json_encode|raw }},
+                accRatings: {{ acc_ratings|json_encode|raw }},
+                accGrades: {{ acc_grades|json_encode|raw }},
+                angle: Alpine.$persist(0),
+                observeAngle(event) {
+                    this.angle = event.detail;
+                    this.updateFilteredRoutes();
+                },
+                getRouteGradeIndex(id) {
+                    if (this.accGrades.hasOwnProperty(id) && this.accGrades[id].hasOwnProperty(this.angle)) {
+                        return this.grades.indexOf(this.accGrades[id][this.angle]);
+                    }
+                    return -1;
+                },
                 updateFilteredRoutes() {
                     const lowerName = this.name.toLowerCase();
                     const minGradeIndex = this.grades.indexOf(this.minGrade);
@@ -42,8 +55,14 @@
                         if (this.name != "" && !route.name.toLowerCase().includes(lowerName)) {
                             return false;
                         }
-                        const routeGradeIndex = this.grades.indexOf(route.grade);
-                        return routeGradeIndex >= minGradeIndex && routeGradeIndex <= maxGradeIndex;
+                        const routeGradeIndex = this.getRouteGradeIndex(route.id);
+                        if (routeGradeIndex !== -1) {
+                            return routeGradeIndex >= minGradeIndex && routeGradeIndex <= maxGradeIndex;
+                        }
+                        if (minGradeIndex == -1) {
+                            return true;
+                        }
+                        return false;
                     }).sort((a, b) => {
                         if (this.sortBy == 'newest' || this.sortBy == 'oldest') {
                             var factor = 1;
@@ -62,8 +81,8 @@
                             if (this.sortBy == 'easiest') {
                                 factor = -1;
                             }
-                            const aGradeIndex = this.grades.indexOf(a.grade);
-                            const bGradeIndex = this.grades.indexOf(b.grade);
+                            const aGradeIndex = this.getRouteGradeIndex(a.id);
+                            const bGradeIndex = this.getRouteGradeIndex(b.id);
                             if (aGradeIndex < bGradeIndex) {
                                 return 1 * factor;
                             } else if (aGradeIndex > bGradeIndex) {
@@ -87,7 +106,7 @@
             }
         }
     </script>
-    <ul x-data="initRouteList()" @filter.window="observeFilter" role="list" class="divide-y divide-gray-200 dark:divide-white/5">
+    <ul x-data="initRouteList()" @filter.window="observeFilter" @angle.window="observeAngle" role="list" class="divide-y divide-gray-200 dark:divide-white/5">
         <template x-for="route in filteredRoutes" hidden>
             <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
                 <div class="overflow-auto">
@@ -100,10 +119,24 @@
                             <circle r="1" cx="1" cy="1" />
                         </svg>
                         <p><time :datetime="route['created_at'].toISOString()" x-text="route['created_at'].toDateString()"></time></p>
+                        <div class="flex items-center gap-x-2" x-show="accRatings.hasOwnProperty(route['id']) && accRatings[route['id']].hasOwnProperty(angle)" x-cloak>
+                            <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
+                                <circle r="1" cx="1" cy="1" />
+                            </svg>
+                            <div class="flex items-center">
+                                <template x-for="i in 5">
+                                    <span :class="{'text-yellow-400': accRatings[route['id']][angle] >= i ,'text-gray-500 dark:text-gray-400': accRatings[route['id']][angle] < i}">
+                                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                            <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="w-auto">
-                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="route.grade"></p>
+                <div class="w-auto" x-show="accGrades.hasOwnProperty(route['id']) && accGrades[route['id']].hasOwnProperty(angle)" x-cloak>
+                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="accGrades[route['id']][angle]"></p>
                 </div>
             </li>
         </template>

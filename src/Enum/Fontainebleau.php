@@ -37,4 +37,5 @@ enum Fontainebleau: string
     case FB_8C = '8C';
     case FB_8C_P = '8C+';
     case FB_9A = '9A';
+    case FB_9A_P = '9A+';
 }

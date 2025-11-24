@@ -11,7 +11,7 @@
             },
             clear() {
                 this.name = '';
-                this.minGrade = "{{ grades[0].value }}";
+                this.minGrade = "";
                 this.maxGrade = "{{ grades[grades|length-1].value }}";
                 this.sortBy = 'newest';
                 this.dispatch();
@@ -20,7 +20,7 @@
                 this.$dispatch('filter', { name: this.name, minGrade: this.minGrade, maxGrade: this.maxGrade, sortBy: this.sortBy });
             },
             name: Alpine.$persist(""),
-            minGrade: Alpine.$persist("{{ grades[0].value }}"),
+            minGrade: Alpine.$persist(""),
             maxGrade: Alpine.$persist("{{ grades[grades|length-1].value }}"),
             sortBy: Alpine.$persist("newest")
         }
@@ -73,6 +73,7 @@
                                         <label for="min_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Minimum Grade</label>
                                         <div class="mt-2 grid grid-cols-1">
                                             <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
+                                                <option :selected="minGrade == ''"></option>
                                                 {% for grade in grades %}
                                                     <option :selected="minGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                                 {% endfor %}

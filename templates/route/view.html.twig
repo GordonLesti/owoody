@@ -29,7 +29,21 @@
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl" x-data="{activeTab: 'info'}">
+<script>
+    function initRouteView()
+    {
+        return {
+            activeTab: 'info',
+            angle: Alpine.$persist(0),
+            observeAngle(event) {
+                this.angle = event.detail;
+            },
+            accRatings: {{ acc_ratings|json_encode|raw }},
+            accGrades: {{ acc_grades|json_encode|raw }}
+        };
+    }
+</script>
+<div class="mx-auto max-w-2xl" x-data="initRouteView" @angle.window="observeAngle">
     <div class="pb-6">
         {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
     </div>
@@ -51,7 +65,7 @@
             <nav aria-label="Tabs" class="isolate flex divide-x divide-gray-200 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
                 <!-- Current: "text-gray-900 dark:text-white", Default: "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white" -->
                 {% for entry in tab_entries %}
-                <a href="#" @click="activeTab = '{{ entry.id }}'" :class="{'text-gray-900 dark:text-white': activeTab == '{{ entry.id }}'}" class="group relative min-w-0 flex-1 overflow-hidden rounded-r-lg px-4 py-4 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:z-10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white">
+                <a href="#" @click="activeTab = '{{ entry.id }}'" :class="{'text-gray-900 dark:text-white': activeTab == '{{ entry.id }}'}" class="group relative min-w-0 flex-1 overflow-hidden first:rounded-l-lg last:rounded-r-lg px-4 py-4 text-center text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 focus:z-10 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white">
                     <span>{{ entry.label }}</span>
                     <span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-0.5 bg-transparent"></span>
                 </a>
@@ -65,9 +79,21 @@
             <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Name</dt>
             <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.name }}</dd>
         </div>
-        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" x-show="accGrades.hasOwnProperty(angle)">
             <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Grade</dt>
-            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">{{ route_entity.grade.value }}</dd>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400" x-text="accGrades[angle]"></dd>
+        </div>
+        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0" x-show="accRatings.hasOwnProperty(angle)">
+            <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Rating</dt>
+            <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400 flex items-center">
+                <template x-for="i in 5">
+                    <span :class="{'text-yellow-400': accRatings[angle] >= i ,'text-gray-500 dark:text-gray-400': accRatings[angle] < i}">
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                            <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </template>
+            </dd>
         </div>
         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Route Setter</dt>

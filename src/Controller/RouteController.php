@@ -11,6 +11,8 @@ use App\Form\LogType;
 use App\Form\RouteType;
 use App\Repository\RouteRepository;
 use App\Repository\SettingRepository;
+use App\Service\GradeAccumulator;
+use App\Service\RatingAccumulator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,23 +23,40 @@ use Symfony\Component\Routing\Requirement\Requirement;
 final class RouteController extends AbstractController
 {
     #[Route('/routes', name: 'route', methods: ['GET'])]
-    public function index(RouteRepository $routeRepository, SettingRepository $settingRepository): Response
-    {
+    public function index(
+        RouteRepository $routeRepository,
+        SettingRepository $settingRepository,
+        RatingAccumulator $ratingAcc,
+        GradeAccumulator $gradeAcc,
+    ): Response {
         $setting = $settingRepository->getLatestSetting();
         $isAdjustable = false;
         if ($setting !== null) {
             $isAdjustable = $setting->isAdjustable();
         }
+        $routes = $routeRepository->findAll();
+        $ratings = [];
+        $grades = [];
+        foreach ($routes as $route) {
+            $ratings[$route->getId()] = $ratingAcc->getAccumulatedRatings($route);
+            $grades[$route->getId()] = $gradeAcc->getAccumulatedGradings($route);
+        }
         return $this->render('route/index.html.twig', [
-            'routes' => $routeRepository->findAll(),
+            'routes' => $routes,
             'grades' => Fontainebleau::cases(),
             'is_adjustable' => $isAdjustable,
+            'acc_ratings' => $ratings,
+            'acc_grades' => $grades,
         ]);
     }
 
     #[Route('/routes/{id:route}/view', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
-    public function view(EntityRoute $route, SettingRepository $settingRepository): Response
-    {
+    public function view(
+        EntityRoute $route,
+        SettingRepository $settingRepository,
+        RatingAccumulator $ratingAcc,
+        GradeAccumulator $gradeAcc
+    ): Response {
         $setting = $settingRepository->getLatestSetting();
         $isSymmetric = false;
         $isAdjustable = false;
@@ -49,6 +68,8 @@ final class RouteController extends AbstractController
             'route_entity' => $route,
             'is_symmetric' => $isSymmetric,
             'is_adjustable' => $isAdjustable,
+            'acc_ratings' => $ratingAcc->getAccumulatedRatings($route),
+            'acc_grades' => $gradeAcc->getAccumulatedGradings($route),
         ]);
     }
 
