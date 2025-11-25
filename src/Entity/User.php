@@ -41,6 +41,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'user')]
     private Collection $logs;
 
+    #[ORM\ManyToMany(targetEntity: Route::class)]
+    private Collection $bookmarks;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -125,6 +128,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     public function setLogs(Collection $logs): static
     {
         $this->logs = $logs;
+
+        return $this;
+    }
+
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function setBookmarks(Collection $bookmarks): static
+    {
+        $this->bookmarks = $bookmarks;
 
         return $this;
     }

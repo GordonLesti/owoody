@@ -11,9 +11,7 @@ use App\Form\LogType;
 use App\Form\RouteType;
 use App\Repository\RouteRepository;
 use App\Repository\SettingRepository;
-use App\Service\GradeAccumulator;
 use App\Service\LogAccumulator;
-use App\Service\RatingAccumulator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,8 +59,13 @@ final class RouteController extends AbstractController
             'acc_ratings' => $ratings,
             'log_counts' => $logCounts,
         ];
-        if ($user != null) {
+        if ($user !== null) {
             $parameters['user_counts'] = $userCounts;
+            $bookmarks = [];
+            foreach ($user->getBookmarks() as $item) {
+                $bookmarks[] = $item->getId();
+            }
+            $parameters['bookmarks'] = $bookmarks;
         }
         return $this->render('route/index.html.twig', $parameters);
     }
@@ -90,6 +93,9 @@ final class RouteController extends AbstractController
             'acc_ratings' => $accData['ratings'],
             'log_counts' => $accData['counts'],
         ];
+        if ($user !== null) {
+            $parameters['is_in_bookmark'] = $user->getBookmarks()->contains($route);
+        }
         if (isset($accData['user_counts'])) {
             $parameters['user_counts'] = $accData['user_counts'];
         }
@@ -216,12 +222,49 @@ final class RouteController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $token = (string) $request->getPayload()->get('token');
         if (!$this->isCsrfTokenValid('delete', $token)) {
-            return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('error', 'Invalid Csrf token.');
+            return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
         }
         $entityManager->remove($route);
         $entityManager->flush();
         $this->addFlash('success', 'Route deleted successfully!');
 
         return $this->redirectToRoute('route', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/routes/{id:route}/bookmark/add', name: 'route_bookmark_add', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
+    public function addBookmark(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $token = (string) $request->getPayload()->get('token');
+        if (!$this->isCsrfTokenValid('bookmark', $token)) {
+            $this->addFlash('error', 'Invalid Csrf token.');
+            return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
+        }
+        $user = $this->getUser();
+        $bookmarks = $user->getBookmarks();
+        $bookmarks->add($route);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('success', 'Route added bookmarks successfully!');
+        return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/routes/{id:route}/bookmark/delete', name: 'route_bookmark_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
+    public function deleteBookmark(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $token = (string) $request->getPayload()->get('token');
+        if (!$this->isCsrfTokenValid('bookmark', $token)) {
+            $this->addFlash('error', 'Invalid Csrf token.');
+            return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
+        }
+        $user = $this->getUser();
+        $bookmarks = $user->getBookmarks();
+        $bookmarks->removeElement($route);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('success', 'Route removed from bookmarks successfully!');
+        return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
     }
 }

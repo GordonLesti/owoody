@@ -39,6 +39,7 @@
                 logCounts: {{ log_counts|json_encode|raw }},
                 {% if app.user %}
                 userCounts: {{ user_counts|json_encode|raw }},
+                bookmarks: {{ bookmarks|json_encode|raw }},
                 {% endif %}
                 angle: Alpine.$persist(0),
                 observeAngle(event) {
@@ -197,7 +198,7 @@
     <ul x-data="initRouteList()" @filter.window="observeFilter" @angle.window="observeAngle" role="list" class="divide-y divide-gray-200 dark:divide-white/5">
         <template x-for="route in filteredRoutes" hidden>
             <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
-                <div class="overflow-auto">
+                <div class="grow overflow-auto">
                     <p class="text-sm/6 font-semibold text-gray-900 dark:text-white text-nowrap overflow-hidden text-ellipsis">
                         <a :href="route.link" class="hover:underline" x-text="route.name"></a>
                     </p>
@@ -230,6 +231,11 @@
                         <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route['id'], true)" x-cloak>
                             <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                         </svg>
+                        {% if app.user %}
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="bookmarks.includes(route['id'])" x-cloak>
+                            <path d="M3.75 2a.75.75 0 0 0-.75.75v10.5a.75.75 0 0 0 1.28.53L8 10.06l3.72 3.72a.75.75 0 0 0 1.28-.53V2.75a.75.75 0 0 0-.75-.75h-8.5Z" />
+                        </svg>
+                        {% endif %}
                     </p>
                 </div>
                 <div class="w-auto" x-show="accGrades.hasOwnProperty(route['id']) && accGrades[route['id']].hasOwnProperty(angle)" x-cloak>
