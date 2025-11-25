@@ -47,6 +47,12 @@
                     }
                     return -1;
                 },
+                getRouteRating(id) {
+                    if (this.accRatings.hasOwnProperty(id) && this.accRatings[id].hasOwnProperty(this.angle)) {
+                        return this.accRatings[id][this.angle];
+                    }
+                    return -1;
+                },
                 updateFilteredRoutes() {
                     const lowerName = this.name.toLowerCase();
                     const minGradeIndex = this.grades.indexOf(this.minGrade);
@@ -56,13 +62,22 @@
                             return false;
                         }
                         const routeGradeIndex = this.getRouteGradeIndex(route.id);
-                        if (routeGradeIndex !== -1) {
-                            return routeGradeIndex >= minGradeIndex && routeGradeIndex <= maxGradeIndex;
+                        if (routeGradeIndex === -1) {
+                            if (this.exclUngraded) {
+                                return false;
+                            }
+                        } else if (routeGradeIndex < minGradeIndex || routeGradeIndex > maxGradeIndex){
+                            return false;
                         }
-                        if (minGradeIndex == -1) {
-                            return true;
+                        const routeRating = this.getRouteRating(route.id);
+                        if (routeRating === -1) {
+                            if (this.exclUnrated) {
+                                return false;
+                            }
+                        } else if (routeRating < this.minRating || routeRating > this.maxRating) {
+                            return false;
                         }
-                        return false;
+                        return true;
                     }).sort((a, b) => {
                         if (this.sortBy == 'newest' || this.sortBy == 'oldest') {
                             var factor = 1;
@@ -90,6 +105,20 @@
                             }
                             return 0;
                         }
+                        if (this.sortBy == 'best' || this.sortBy == 'worst') {
+                            var factor = 1;
+                            if (this.sortBy == 'worst') {
+                                factor = -1;
+                            }
+                            const aRating = this.getRouteRating(a.id);
+                            const bRating = this.getRouteRating(b.id);
+                            if (aRating < bRating) {
+                                return 1 * factor;
+                            } else if (aRating > bRating) {
+                                return -1 * factor;
+                            }
+                            return 0;
+                        }
                     });
                 },
                 observeFilter($event) {
@@ -97,11 +126,19 @@
                     this.minGrade = $event.detail.minGrade;
                     this.maxGrade = $event.detail.maxGrade;
                     this.sortBy = $event.detail.sortBy;
+                    this.exclUngraded = $event.detail.exclUngraded;
+                    this.minRating = $event.detail.minRating;
+                    this.maxRating = $event.detail.maxRating;
+                    this.exclUnrated = $event.detail.exclUnrated;
                     this.updateFilteredRoutes();
                 },
                 name: Alpine.$persist(""),
                 minGrade: Alpine.$persist("{{ grades[0].value }}"),
                 maxGrade: Alpine.$persist("{{ grades[grades|length-1].value }}"),
+                exclUngraded: Alpine.$persist(false),
+                minRating: Alpine.$persist(1),
+                maxRating: Alpine.$persist(5),
+                exclUnrated: Alpine.$persist(false),
                 sortBy: Alpine.$persist("newest")
             }
         }

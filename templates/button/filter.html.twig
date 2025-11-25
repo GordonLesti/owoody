@@ -11,17 +11,36 @@
             },
             clear() {
                 this.name = '';
-                this.minGrade = "";
+                this.minGrade = "{{ grades[0].value }}";
                 this.maxGrade = "{{ grades[grades|length-1].value }}";
                 this.sortBy = 'newest';
+                this.exclUngraded = false;
+                this.minRating = 1;
+                this.maxRating = 5;
+                this.exclUnrated = false;
                 this.dispatch();
             },
             dispatch() {
-                this.$dispatch('filter', { name: this.name, minGrade: this.minGrade, maxGrade: this.maxGrade, sortBy: this.sortBy });
+                this.$dispatch(
+                    'filter', {
+                        name: this.name,
+                        minGrade: this.minGrade,
+                        maxGrade: this.maxGrade,
+                        sortBy: this.sortBy,
+                        exclUngraded: this.exclUngraded,
+                        minRating: this.minRating,
+                        maxRating: this.maxRating,
+                        exclUnrated: this.exclUnrated
+                    }
+                );
             },
             name: Alpine.$persist(""),
-            minGrade: Alpine.$persist(""),
+            minGrade: Alpine.$persist("{{ grades[0].value }}"),
             maxGrade: Alpine.$persist("{{ grades[grades|length-1].value }}"),
+            exclUngraded: Alpine.$persist(false),
+            minRating: Alpine.$persist(1),
+            maxRating: Alpine.$persist(5),
+            exclUnrated: Alpine.$persist(false),
             sortBy: Alpine.$persist("newest")
         }
     }
@@ -73,7 +92,6 @@
                                         <label for="min_grade" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Minimum Grade</label>
                                         <div class="mt-2 grid grid-cols-1">
                                             <select id="min_grade" name="min_grade" @change="changeValue('minGrade', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
-                                                <option :selected="minGrade == ''"></option>
                                                 {% for grade in grades %}
                                                     <option :selected="minGrade == '{{ grade.value }}'">{{ grade.value }}</option>
                                                 {% endfor %}
@@ -96,11 +114,65 @@
                                             </svg>
                                         </div>
                                     </div>
+                                    <div class="sm:col-span-4 flex gap-3">
+                                        <div class="flex h-6 shrink-0 items-center">
+                                            <div class="group grid size-4 grid-cols-1">
+                                                <input id="excl_ungraded" type="checkbox" name="excl_ungraded" @click="changeValue('exclUngraded', $event.target.checked)" :checked="exclUngraded" aria-describedby="exclude-ungraded-description" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-emerald-600 checked:bg-emerald-600 indeterminate:border-emerald-600 indeterminate:bg-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-emerald-500 dark:checked:bg-emerald-500 dark:indeterminate:border-emerald-500 dark:indeterminate:bg-emerald-500 dark:focus-visible:outline-emerald-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                                <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
+                                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
+                                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm/6">
+                                            <label for="excl_ungraded" class="font-medium text-gray-900 dark:text-white">Exclude ungraded</label>
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-3">
+                                        <label for="min_rating" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Minimum Rating</label>
+                                        <div class="mt-2 grid grid-cols-1">
+                                            <select id="min_rating" name="min_rating" @change="changeValue('minRating', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
+                                                {% for i in 1..5 %}
+                                                    <option :selected="minRating == {{ i }}">{{ i }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-3">
+                                        <label for="max_rating" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Maximum Rating</label>
+                                        <div class="mt-2 grid grid-cols-1">
+                                            <select id="max_rating" name="max_rating" @change="changeValue('maxRating', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
+                                                {% for i in 0..5 %}
+                                                    <option :selected="maxRating == {{ i }}">{{ i }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-4 flex gap-3">
+                                        <div class="flex h-6 shrink-0 items-center">
+                                            <div class="group grid size-4 grid-cols-1">
+                                                <input id="excl_unrated" type="checkbox" name="excl_unrated" @click="changeValue('exclUnrated', $event.target.checked)" :checked="exclUnrated" aria-describedby="exclude-unrated-description" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-emerald-600 checked:bg-emerald-600 indeterminate:border-emerald-600 indeterminate:bg-emerald-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-emerald-500 dark:checked:bg-emerald-500 dark:indeterminate:border-emerald-500 dark:indeterminate:bg-emerald-500 dark:focus-visible:outline-emerald-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                                <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
+                                                    <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
+                                                    <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm/6">
+                                            <label for="excl_unrated" class="font-medium text-gray-900 dark:text-white">Exclude unrated</label>
+                                        </div>
+                                    </div>
                                     <div class="sm:col-span-3">
                                         <label for="sort_by" class="block text-sm/6 font-medium text-gray-900 dark:text-white">Sort By</label>
                                         <div class="mt-2 grid grid-cols-1">
                                             <select id="sort_by" name="sort_by" @change="changeValue('sortBy', $event.target.value)" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
-                                                {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}] %}
+                                                {% set sortBy = [{'label': 'Newest', 'value': 'newest'}, {'label': 'Oldest', 'value': 'oldest'}, {'label': 'Easiest', 'value': 'easiest'}, {'label': 'Hardest', 'value': 'hardest'}, {'label': 'Best', 'value': 'best'}, {'label': 'Worst', 'value': 'worst'}] %}
                                                 {% for sorting in sortBy %}
                                                     <option :selected="sortBy == '{{ sorting.value }}'" value="{{ sorting.value }}">{{ sorting.label }}</option>
                                                 {% endfor %}
