@@ -46,7 +46,6 @@
             {% endif %}
             getAccentsText() {
                 const accentCount = this.logCounts.hasOwnProperty(this.angle) ? this.logCounts[this.angle] : 0;
-                console.log('userCounts' in this);
                 if ('userCounts' in this && this.userCounts.hasOwnProperty(this.angle)) {
                     return accentCount + ' (' + (this.userCounts[this.angle][0] + this.userCounts[this.angle][1]) + ' by you)';
                 }
