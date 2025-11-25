@@ -32,6 +32,7 @@ final class IndexController extends AbstractController
         $routeCount = count($routeRepo->findAll());
         return $this->render('index.html.twig', [
             'route_count' => $routeCount,
+            'log_count' => count($logs),
             'easiest' => $routeCount ? $grades[$easiestKey] : null,
             'hardest' => $routeCount ? $grades[$hardestKey] : null,
         ]);
