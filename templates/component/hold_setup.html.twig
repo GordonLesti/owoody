@@ -9,7 +9,7 @@
 
         return {
             bulbIsOn: Alpine.$persist(false),
-            isMirrored: Alpine.$persist({}),
+            isMirrored: editMode ? {} : Alpine.$persist({}),
             holdSetup: [],
             badgeStatus: 0,
             badgeText: '',
