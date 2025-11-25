@@ -36,6 +36,10 @@
                 grades: {{ grades|json_encode|raw }},
                 accRatings: {{ acc_ratings|json_encode|raw }},
                 accGrades: {{ acc_grades|json_encode|raw }},
+                logCounts: {{ log_counts|json_encode|raw }},
+                {% if app.user %}
+                userCounts: {{ user_counts|json_encode|raw }},
+                {% endif %}
                 angle: Alpine.$persist(0),
                 observeAngle(event) {
                     this.angle = event.detail;
@@ -52,6 +56,23 @@
                         return this.accRatings[id][this.angle];
                     }
                     return -1;
+                },
+                getRouteLogCount(id) {
+                    if (this.logCounts.hasOwnProperty(id) && this.logCounts[id].hasOwnProperty(this.angle)) {
+                        return this.logCounts[id][this.angle];
+                    }
+                    return -1;
+                },
+                getAccentsText(id) {
+                    const routeLogCount = this.getRouteLogCount(id);
+                    let result = (routeLogCount > 0 ? routeLogCount : 0) + ' accents';
+                    if ('userCounts' in this && this.userCounts.hasOwnProperty(id) && this.userCounts[id].hasOwnProperty(this.angle)) {
+                        result += ' (' + (this.userCounts[id][this.angle][0] + this.userCounts[id][this.angle][1]) + ' by you)';
+                    }
+                    return result;
+                },
+                hasUserSend(id, isMirrored = false) {
+                    return 'userCounts' in this && this.userCounts.hasOwnProperty(id) && this.userCounts[id].hasOwnProperty(this.angle) && this.userCounts[id][this.angle][isMirrored ? 1 : 0] > 0;
                 },
                 updateFilteredRoutes() {
                     const lowerName = this.name.toLowerCase();
@@ -119,6 +140,20 @@
                             }
                             return 0;
                         }
+                        if (this.sortBy == 'popular' || this.sortBy == 'unpopular') {
+                            var factor = 1;
+                            if (this.sortBy == 'unpopular') {
+                                factor = -1;
+                            }
+                            const aCount = this.getRouteLogCount(a.id);
+                            const bCount = this.getRouteLogCount(b.id);
+                            if (aCount < bCount) {
+                                return 1 * factor;
+                            } else if (aCount > bCount) {
+                                return -1 * factor;
+                            }
+                            return 0;
+                        }
                     });
                 },
                 observeFilter($event) {
@@ -171,6 +206,15 @@
                             </div>
                         </div>
                     </div>
+                    <p class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
+                        <span x-text="getAccentsText(route['id'])"></span>
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route['id'])" x-cloak>
+                            <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
+                        </svg>
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route['id'], true)" x-cloak>
+                            <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                        </svg>
+                    </p>
                 </div>
                 <div class="w-auto" x-show="accGrades.hasOwnProperty(route['id']) && accGrades[route['id']].hasOwnProperty(angle)" x-cloak>
                     <p class="text-sm/6 text-gray-900 dark:text-white" x-text="accGrades[route['id']][angle]"></p>

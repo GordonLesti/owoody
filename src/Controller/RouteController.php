@@ -12,6 +12,7 @@ use App\Form\RouteType;
 use App\Repository\RouteRepository;
 use App\Repository\SettingRepository;
 use App\Service\GradeAccumulator;
+use App\Service\LogAccumulator;
 use App\Service\RatingAccumulator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,8 +27,7 @@ final class RouteController extends AbstractController
     public function index(
         RouteRepository $routeRepository,
         SettingRepository $settingRepository,
-        RatingAccumulator $ratingAcc,
-        GradeAccumulator $gradeAcc,
+        LogAccumulator $logAcc,
     ): Response {
         $setting = $settingRepository->getLatestSetting();
         $isAdjustable = false;
@@ -35,27 +35,40 @@ final class RouteController extends AbstractController
             $isAdjustable = $setting->isAdjustable();
         }
         $routes = $routeRepository->findAll();
-        $ratings = [];
         $grades = [];
+        $ratings = [];
+        $logCounts = [];
+        $userCounts = [];
+        $user = $this->getUser();
         foreach ($routes as $route) {
-            $ratings[$route->getId()] = $ratingAcc->getAccumulatedRatings($route);
-            $grades[$route->getId()] = $gradeAcc->getAccumulatedGradings($route);
+            $accData = $logAcc->getAccumulatedData($route, $user);
+            $routeId = $route->getId();
+            $grades[$routeId] = $accData['grades'];
+            $ratings[$routeId] = $accData['ratings'];
+            $logCounts[$routeId] = $accData['counts'];
+            if (isset($accData['user_counts'])) {
+                $userCounts[$routeId] = $accData['user_counts'];
+            }
         }
-        return $this->render('route/index.html.twig', [
+        $parameters = [
             'routes' => $routes,
             'grades' => Fontainebleau::cases(),
             'is_adjustable' => $isAdjustable,
-            'acc_ratings' => $ratings,
             'acc_grades' => $grades,
-        ]);
+            'acc_ratings' => $ratings,
+            'log_counts' => $logCounts,
+        ];
+        if ($user != null) {
+            $parameters['user_counts'] = $userCounts;
+        }
+        return $this->render('route/index.html.twig', $parameters);
     }
 
     #[Route('/routes/{id:route}/view', name: 'route_view', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
     public function view(
         EntityRoute $route,
         SettingRepository $settingRepository,
-        RatingAccumulator $ratingAcc,
-        GradeAccumulator $gradeAcc
+        LogAccumulator $logAcc,
     ): Response {
         $setting = $settingRepository->getLatestSetting();
         $isSymmetric = false;
@@ -64,13 +77,20 @@ final class RouteController extends AbstractController
             $isSymmetric = $setting->isSymmetric();
             $isAdjustable = $setting->isAdjustable();
         }
-        return $this->render('route/view.html.twig', [
+        $user = $this->getUser();
+        $accData = $logAcc->getAccumulatedData($route, $user);
+        $parameters = [
             'route_entity' => $route,
             'is_symmetric' => $isSymmetric,
             'is_adjustable' => $isAdjustable,
-            'acc_ratings' => $ratingAcc->getAccumulatedRatings($route),
-            'acc_grades' => $gradeAcc->getAccumulatedGradings($route),
-        ]);
+            'acc_grades' => $accData['grades'],
+            'acc_ratings' => $accData['ratings'],
+            'log_counts' => $accData['counts'],
+        ];
+        if (isset($accData['user_counts'])) {
+            $parameters['user_counts'] = $accData['user_counts'];
+        }
+        return $this->render('route/view.html.twig', $parameters);
     }
 
     #[Route('/routes/{id:route}/edit', name: 'route_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
