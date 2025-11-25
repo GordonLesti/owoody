@@ -30,8 +30,10 @@ final class RouteController extends AbstractController
         LogAccumulator $logAcc,
     ): Response {
         $setting = $settingRepository->getLatestSetting();
+        $isSymmetric = false;
         $isAdjustable = false;
         if ($setting !== null) {
+            $isSymmetric = $setting->isSymmetric();
             $isAdjustable = $setting->isAdjustable();
         }
         $routes = $routeRepository->findAll();
@@ -53,6 +55,7 @@ final class RouteController extends AbstractController
         $parameters = [
             'routes' => $routes,
             'grades' => Fontainebleau::cases(),
+            'is_symmetric' => $isSymmetric,
             'is_adjustable' => $isAdjustable,
             'acc_grades' => $grades,
             'acc_ratings' => $ratings,

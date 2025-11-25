@@ -98,6 +98,20 @@
                         } else if (routeRating < this.minRating || routeRating > this.maxRating) {
                             return false;
                         }
+                        {% if app.user %}
+                            if (this.userSent == 'sent' && !this.hasUserSend(route.id) && !this.hasUserSend(route.id, true)) {
+                                return false;
+                            }
+                            if (this.userSent == 'notsent' && (this.hasUserSend(route.id) || this.hasUserSend(route.id, true))) {
+                                return false;
+                            }
+                            if (this.userSent == 'sentboth' && !(this.hasUserSend(route.id) && this.hasUserSend(route.id, true))) {
+                                return false;
+                            }
+                            if (this.userSent == 'onlyone' && this.hasUserSend(route.id) == this.hasUserSend(route.id, true)) {
+                                return false;
+                            }
+                        {% endif %}
                         return true;
                     }).sort((a, b) => {
                         if (this.sortBy == 'newest' || this.sortBy == 'oldest') {
@@ -165,6 +179,7 @@
                     this.minRating = $event.detail.minRating;
                     this.maxRating = $event.detail.maxRating;
                     this.exclUnrated = $event.detail.exclUnrated;
+                    this.userSent = $event.detail.userSent;
                     this.updateFilteredRoutes();
                 },
                 name: Alpine.$persist(""),
@@ -174,6 +189,7 @@
                 minRating: Alpine.$persist(1),
                 maxRating: Alpine.$persist(5),
                 exclUnrated: Alpine.$persist(false),
+                userSent: Alpine.$persist(""),
                 sortBy: Alpine.$persist("newest")
             }
         }
