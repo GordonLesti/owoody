@@ -87,6 +87,7 @@ final class RouteController extends AbstractController
         $accData = $logAcc->getAccumulatedData($route, $user);
         $parameters = [
             'route_entity' => $route,
+            'grades' => Fontainebleau::cases(),
             'is_symmetric' => $isSymmetric,
             'is_adjustable' => $isAdjustable,
             'acc_grades' => $accData['grades'],

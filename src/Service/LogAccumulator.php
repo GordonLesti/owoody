@@ -44,7 +44,7 @@ class LogAccumulator
         $accGrades = [];
         $logCount = [];
         foreach ($groupedGrades as $angle => $gradeSets) {
-            $accGrades[$angle] = $this->transferNumberToGrade((int)round(array_sum($gradeSets) / count($gradeSets)));
+            $accGrades[$angle] = array_sum($gradeSets) / count($gradeSets);
             $logCount[$angle] = count($gradeSets);
         }
         $accRatings = [];
@@ -65,10 +65,5 @@ class LogAccumulator
     private function transerGradeToNumber(Fontainebleau $grade): int
     {
         return array_search($grade, $this->gradeScale);
-    }
-
-    private function transferNumberToGrade(int $number): Fontainebleau
-    {
-        return $this->gradeScale[$number];
     }
 }

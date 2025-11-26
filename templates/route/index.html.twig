@@ -48,7 +48,7 @@
                 },
                 getRouteGradeIndex(id) {
                     if (this.accGrades.hasOwnProperty(id) && this.accGrades[id].hasOwnProperty(this.angle)) {
-                        return this.grades.indexOf(this.accGrades[id][this.angle]);
+                        return this.accGrades[id][this.angle];
                     }
                     return -1;
                 },
@@ -247,7 +247,7 @@
                     </p>
                 </div>
                 <div class="w-auto" x-show="accGrades.hasOwnProperty(route['id']) && accGrades[route['id']].hasOwnProperty(angle)" x-cloak>
-                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="accGrades[route['id']][angle]"></p>
+                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="grades[Math.round(accGrades[route['id']][angle])]"></p>
                 </div>
             </li>
         </template>
