@@ -49,7 +49,7 @@ class LogAccumulator
         }
         $accRatings = [];
         foreach ($groupedRatings as $angle => $ratingSets) {
-            $accRatings[$angle] = round(array_sum($ratingSets) / count($ratingSets));
+            $accRatings[$angle] = array_sum($ratingSets) / count($ratingSets);
         }
         $result = [
             'grades' => $accGrades,
