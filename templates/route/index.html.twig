@@ -112,6 +112,12 @@
                             if (this.userSent == 'onlyone' && this.hasUserSend(route.id) == this.hasUserSend(route.id, true)) {
                                 return false;
                             }
+                            if (this.bookmarked == 'bookmark' && !this.bookmarks.includes(route.id)) {
+                                return false;
+                            }
+                            if (this.bookmarked == 'nobookmark' && this.bookmarks.includes(route.id)) {
+                                return false;
+                            }
                         {% endif %}
                         return true;
                     }).sort((a, b) => {
@@ -181,6 +187,7 @@
                     this.maxRating = $event.detail.maxRating;
                     this.exclUnrated = $event.detail.exclUnrated;
                     this.userSent = $event.detail.userSent;
+                    this.bookmarked = $event.detail.bookmarked;
                     this.updateFilteredRoutes();
                 },
                 name: Alpine.$persist(""),
@@ -190,7 +197,8 @@
                 minRating: Alpine.$persist(1),
                 maxRating: Alpine.$persist(5),
                 exclUnrated: Alpine.$persist(false),
-                userSent: Alpine.$persist(""),
+                userSent: Alpine.$persist("all"),
+                bookmarked: Alpine.$persist("all"),
                 sortBy: Alpine.$persist("newest")
             }
         }
