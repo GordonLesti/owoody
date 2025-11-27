@@ -31,7 +31,7 @@ class Log implements JsonSerializable
     private bool $isMirrored = false;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Assert\Positive]
+    #[Assert\PositiveOrZero]
     private ?int $angle = null;
 
     #[ORM\Column(nullable: true, enumType: Fontainebleau::class)]
