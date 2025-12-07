@@ -17,7 +17,60 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 final class LogController extends AbstractController
 {
-    #[Route('/log/{id:route}/new', name: 'log_new', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
+    #[Route('/logs', name: 'log', methods: ['GET'])]
+    public function index(): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $user = $this->getUser();
+        return $this->render('log/index.html.twig', [
+            'logs' => $user->getLogs(),
+        ]);
+    }
+
+    #[Route('/logs/{id:log}/edit', name: 'log_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
+    public function edit(Request $request, Log $log, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $form = $this->createForm(LogType::class, $log, [
+            'method' => 'POST',
+            'action' => $this->generateUrl('log_edit', ['id' => $log->getId()]),
+            'attr' => [
+                'id' => 'log_form',
+            ],
+            'route_entity' => $log->getRoute(),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($log);
+            $entityManager->flush();
+            $this->addFlash('success', 'Log updated successfully!');
+
+            return $this->redirectToRoute('log', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('log/edit.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/logs/{id:log}/delete', name: 'log_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
+    public function delete(Request $request, Log $log, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        $token = (string) $request->getPayload()->get('token');
+        if (!$this->isCsrfTokenValid('delete', $token)) {
+            $this->addFlash('error', 'Invalid Csrf token.');
+            return $this->redirectToRoute('log', [], Response::HTTP_SEE_OTHER);
+        }
+        $entityManager->remove($log);
+        $entityManager->flush();
+        $this->addFlash('success', 'Log deleted successfully!');
+
+        return $this->redirectToRoute('log', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/logs/{id:route}/new', name: 'log_new', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityRoute $route,

@@ -19,7 +19,7 @@
     <body class="h-full">
         <div class="min-h-full">
             {% set route = app.request.attributes.get('_route') %}
-            {% set navigation_entries = [{'route': 'index', 'label': 'Dashboard', 'userRequired': false}, {'route': 'route', 'label': 'Routes', 'userRequired': false}, {'route': 'setting' ,'label': 'Settings', 'userRequired': true}] %}
+            {% set navigation_entries = [{'route': 'index', 'label': 'Dashboard', 'userRequired': false}, {'route': 'route', 'label': 'Routes', 'userRequired': false}, {'route': 'log', 'label': 'Logs', 'userRequired': true}, {'route': 'setting' ,'label': 'Settings', 'userRequired': true}] %}
             <nav class="bg-emerald-600 dark:bg-emerald-800" x-data="{ open: false }">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="relative flex h-16 items-center justify-between">

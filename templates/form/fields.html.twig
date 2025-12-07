@@ -40,7 +40,7 @@
         function initRatingInput()
         {
             return {
-                rating: 1,
+                rating: {% if value is defined %}{{ value }}{% else %}1{% endif %},
                 hoverRating: 1,
             }
         }

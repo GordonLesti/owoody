@@ -137,56 +137,56 @@
                     <span aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-white/10"></span>
                     {% endif %}
                     <div class="relative flex space-x-3">
-                    <div>
-                        <span class="flex size-8 items-center justify-center rounded-full ring-8 ring-gray-100 dark:ring-gray-900 {{ entry.isSuccess ? 'bg-green-500' : 'bg-red-500'}}">
-                            {% if entry.isSuccess %}
-                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
-                                <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
-                            </svg>
-                            {% else %}
-                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
-                                <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-                            </svg>
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                         <div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">
-                                <span class="font-medium text-gray-900 dark:text-white">{{ entry.user.userIdentifier }}</span>{{ entry.isSuccess ? '' : ' tried to' }} sent
-                                <span class="font-medium text-gray-900 dark:text-white">{{ route_entity.name }}</span>
-                                {% if entry.angle %}
-                                    @ <span class="font-medium text-gray-900 dark:text-white">{{ entry.angle }}°</span>
-                                {% endif %}
-                                with <span class="font-medium text-gray-900 dark:text-white">{{ entry.attempts }}</span>
-                                {% if entry.attempts > 1 %}
-                                    attempts.
-                                {% else %}
-                                    attempt.
-                                {% endif %}
-                            </p>
-                            <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
-                            {% if entry.isMirrored %}
-                                <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                    <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                            <span class="flex size-8 items-center justify-center rounded-full ring-8 ring-gray-100 dark:ring-gray-900 {{ entry.isSuccess ? 'bg-green-500' : 'bg-red-500'}}">
+                                {% if entry.isSuccess %}
+                                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
+                                    <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
                                 </svg>
-                            {% endif %}
-                            {{ entry.grade.value }}
-                                <div class="flex items-center">
-                                    {% for i in 1..5 %}
-                                        <span class="{{ entry.rating >= i ? 'text-yellow-400' : 'text-gray-500 dark:text-gray-400' }}">
-                                            <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                                <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
-                                            </svg>
-                                        </span>
-                                    {% endfor %}
-                                </div>
-                            </div>                            
+                                {% else %}
+                                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
+                                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                                </svg>
+                                {% endif %}
+                            </span>
                         </div>
-                        <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                            <time datetime="{{ entry.createdAt|date }}">{{ entry.createdAt|date("D M d o") }}</time>
+                        <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ entry.user.userIdentifier }}</span>{{ entry.isSuccess ? '' : ' tried to' }} sent
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ route_entity.name }}</span>
+                                    {% if entry.angle %}
+                                        @ <span class="font-medium text-gray-900 dark:text-white">{{ entry.angle }}°</span>
+                                    {% endif %}
+                                    with <span class="font-medium text-gray-900 dark:text-white">{{ entry.attempts }}</span>
+                                    {% if entry.attempts > 1 %}
+                                        attempts.
+                                    {% else %}
+                                        attempt.
+                                    {% endif %}
+                                </p>
+                                <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
+                                {% if entry.isMirrored %}
+                                    <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                        <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                                    </svg>
+                                {% endif %}
+                                {{ entry.grade.value }}
+                                    <div class="flex items-center">
+                                        {% for i in 1..5 %}
+                                            <span class="{{ entry.rating >= i ? 'text-yellow-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                                    <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                <time datetime="{{ entry.createdAt|date }}">{{ entry.createdAt|date("D M d o") }}</time>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </li>
