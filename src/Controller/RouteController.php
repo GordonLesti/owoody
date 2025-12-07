@@ -176,47 +176,6 @@ final class RouteController extends AbstractController
         ]);
     }
 
-    #[Route('/routes/{id:route}/log', name: 'route_log', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
-    public function log(
-        Request $request,
-        EntityRoute $route,
-        EntityManagerInterface $entityManager,
-        SettingRepository $settingRepository
-    ): Response {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $log = new Log();
-        $log->setUser($this->getUser());
-        $log->setRoute($route);
-        $form = $this->createForm(LogType::class, $log, [
-            'method' => 'POST',
-            'action' => $this->generateUrl('route_log', ['id' => $route->getId()]),
-            'attr' => [
-                'id' => 'log_form',
-            ],
-            'route_entity' => $route,
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $entityManager->persist($log);
-                $entityManager->flush();
-                $this->addFlash('success', 'Log successfully!');
-                return $this->redirectToRoute('route_view', ['id' => $route->getId()], Response::HTTP_SEE_OTHER);
-            }
-        }
-        $setting = $settingRepository->getLatestSetting();
-        $isAdjustable = false;
-        if ($setting !== null) {
-            $isAdjustable = $setting->isAdjustable();
-        }
-        return $this->render('route/log.html.twig', [
-            'form' => $form,
-            'route_entity' => $route,
-            'is_adjustable' => $isAdjustable,
-        ]);
-    }
-
     #[Route('/routes/{id:route}/delete', name: 'route_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
     public function delete(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
     {
