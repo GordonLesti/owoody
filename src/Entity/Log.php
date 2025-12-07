@@ -34,6 +34,9 @@ class Log implements JsonSerializable
     #[Assert\PositiveOrZero]
     private ?int $angle = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isSuccess = true;
+
     #[ORM\Column(nullable: true, enumType: Fontainebleau::class)]
     private ?Fontainebleau $grade = null;
 
@@ -107,6 +110,18 @@ class Log implements JsonSerializable
     public function setAngle(?int $angle): static
     {
         $this->angle = $angle;
+
+        return $this;
+    }
+
+    public function isSuccess(): bool
+    {
+        return $this->isSuccess;
+    }
+
+    public function setIsSuccess(bool $isSuccess): static
+    {
+        $this->isSuccess = $isSuccess;
 
         return $this;
     }

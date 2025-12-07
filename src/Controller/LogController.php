@@ -51,7 +51,7 @@ final class LogController extends AbstractController
         if ($setting !== null) {
             $isAdjustable = $setting->isAdjustable();
         }
-        return $this->render('route/log.html.twig', [
+        return $this->render('log/new.html.twig', [
             'form' => $form,
             'route_entity' => $route,
             'is_adjustable' => $isAdjustable,

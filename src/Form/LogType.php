@@ -14,6 +14,7 @@ use App\Form\Type\RatingType;
 use BackedEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -45,6 +46,10 @@ final class LogType extends AbstractType
             'mapped' => true,
             'required' => false,
             'invalid_message' => 'The angle is invalid.',
+        ])->add('is_success', CheckboxType::class, [
+            'label' => 'Success',
+            'mapped' => true,
+            'required' => true,
         ])->add('grade', EnumType::class, [
             'label' => 'Grade',
             'mapped' => true,
