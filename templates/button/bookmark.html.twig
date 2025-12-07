@@ -2,7 +2,7 @@
 {% set routeName = is_in_bookmark ? 'route_bookmark_delete' : 'route_bookmark_add' %}
 <form action="{{ url(routeName, {id: route_entity.id}) }}" method="post">
     <input type="hidden" name="token" value="{{ csrf_token('bookmark') }}" />
-    <button type="submit" class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
+    <button type="submit" class="relative rounded-full p-1 text-fuchsia-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
         <span class="absolute -inset-1.5"></span>
         <span class="sr-only">Bookmark Route</span>
         {% if not is_in_bookmark %}

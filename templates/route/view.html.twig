@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block navigation_button %}
-<button type="button" @click="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md bg-emerald-600 p-2 text-emerald-200 hover:bg-emerald-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-emerald-800 dark:hover:bg-emerald-700/75">
+<button type="button" @click="location.href='{{ path('route') }}'" class="relative inline-flex items-center justify-center rounded-md bg-fuchsia-600 p-2 text-fuchsia-200 hover:bg-fuchsia-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-fuchsia-800 dark:hover:bg-fuchsia-700/75">
     <span class="absolute -inset-0.5"></span>
     <span class="sr-only">Back to Routes</span>
     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -18,7 +18,7 @@
 {% include 'button/bulb.html.twig' %}
 {% include 'button/mirror.html.twig' %}
 {% if app.user %}
-<button type="button" @click="location.href='{{ path('log_new', {id: route_entity.id}) }}'" class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
+<button type="button" @click="location.href='{{ path('log_new', {id: route_entity.id}) }}'" class="relative rounded-full p-1 text-fuchsia-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
     <span class="absolute -inset-1.5"></span>
     <span class="sr-only">Log</span>
     <svg  fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -65,7 +65,7 @@
     <div>
         <div class="grid grid-cols-1 sm:hidden">
             <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-            <select @change="activeTab = $event.target.value" aria-label="Select a tab" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-emerald-600 dark:bg-white/5 dark:text-gray-100 dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-emerald-500">
+            <select @change="activeTab = $event.target.value" aria-label="Select a tab" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-fuchsia-600 dark:bg-white/5 dark:text-gray-100 dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-fuchsia-500">
             {% for entry in tab_entries %}
                 <option value="{{ entry.id }}" :selected="activeTab == '{{ entry.id }}'">{{ entry.label }}</option>
             {% endfor %}
