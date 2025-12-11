@@ -16,7 +16,7 @@ final class IndexController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(RouteRepository $routeRepo, LogRepository $logRepository): Response
     {
-        $logs = $logRepository->findAll();
+        $logs = $logRepository->findBy(['isSuccess' => true]);
         $grades = Fontainebleau::cases();
         $easiestKey = count($grades) - 1;
         $hardestKey = 0;

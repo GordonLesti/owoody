@@ -24,7 +24,7 @@ class LogAccumulator
         $groupedGrades = [];
         $groupedRatings = [];
         $userCount = [];
-        foreach ($this->logRepo->findBy(['route' => $route]) as $log) {
+        foreach ($this->logRepo->findBy(['route' => $route, 'isSuccess' => true]) as $log) {
             $angle = $log->getAngle();
             if (!isset($groupedGrades[$angle])) {
                 $groupedGrades[$angle] = [];

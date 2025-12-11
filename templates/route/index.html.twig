@@ -204,7 +204,7 @@
         }
     </script>
     <ul x-data="initRouteList()" @filter.window="observeFilter" @angle.window="observeAngle" role="list" class="divide-y divide-gray-200 dark:divide-white/5">
-        <template x-for="route in filteredRoutes" hidden>
+        <template x-for="route in filteredRoutes" :key="route.id" hidden>
             <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
                 <div class="grow overflow-auto">
                     <p class="text-sm/6 font-semibold text-gray-900 dark:text-white text-nowrap overflow-hidden text-ellipsis">
@@ -216,13 +216,13 @@
                             <circle r="1" cx="1" cy="1" />
                         </svg>
                         <p><time :datetime="route['created_at'].toISOString()" x-text="route['created_at'].toDateString()"></time></p>
-                        <div class="flex items-center gap-x-2" x-show="getRouteRating(route['id']) != -1" x-cloak>
+                        <div class="flex items-center gap-x-2" x-show="getRouteRating(route.id) != -1" x-cloak>
                             <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
                                 <circle r="1" cx="1" cy="1" />
                             </svg>
                             <div class="flex items-center">
                                 <template x-for="i in 5">
-                                    <span :class="{'text-yellow-400': Math.round(accRatings[route['id']][angle]) >= i ,'text-gray-500 dark:text-gray-400': Math.round(accRatings[route['id']][angle]) < i}">
+                                    <span :class="{'text-yellow-400': Math.round(accRatings[route.id][angle]) >= i ,'text-gray-500 dark:text-gray-400': Math.round(accRatings[route.id][angle]) < i}">
                                         <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                             <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
                                         </svg>
@@ -232,22 +232,22 @@
                         </div>
                     </div>
                     <p class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
-                        <span x-text="getAccentsText(route['id'])"></span>
-                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route['id'])" x-cloak>
+                        <span x-text="getAccentsText(route.id)"></span>
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route.id)" x-cloak>
                             <path fill-rule="evenodd" d="M12.416 3.376a.75.75 0 0 1 .208 1.04l-5 7.5a.75.75 0 0 1-1.154.114l-3-3a.75.75 0 0 1 1.06-1.06l2.353 2.353 4.493-6.74a.75.75 0 0 1 1.04-.207Z" clip-rule="evenodd" />
                         </svg>
-                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route['id'], true)" x-cloak>
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="hasUserSend(route.id, true)" x-cloak>
                             <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
                         </svg>
                         {% if app.user %}
-                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="bookmarks.includes(route['id'])" x-cloak>
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4" x-show="bookmarks.includes(route.id)" x-cloak>
                             <path d="M3.75 2a.75.75 0 0 0-.75.75v10.5a.75.75 0 0 0 1.28.53L8 10.06l3.72 3.72a.75.75 0 0 0 1.28-.53V2.75a.75.75 0 0 0-.75-.75h-8.5Z" />
                         </svg>
                         {% endif %}
                     </p>
                 </div>
-                <div class="w-auto" x-show="accGrades.hasOwnProperty(route['id']) && accGrades[route['id']].hasOwnProperty(angle)" x-cloak>
-                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="grades[Math.round(accGrades[route['id']][angle])]"></p>
+                <div class="w-auto" x-show="accGrades.hasOwnProperty(route.id) && accGrades[route.id].hasOwnProperty(angle)" x-cloak>
+                    <p class="text-sm/6 text-gray-900 dark:text-white" x-text="grades[Math.round(accGrades[route.id][angle])]"></p>
                 </div>
             </li>
         </template>
