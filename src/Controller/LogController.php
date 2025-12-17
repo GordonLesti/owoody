@@ -22,8 +22,17 @@ final class LogController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $user = $this->getUser();
+        $logs = array_reverse($user->getLogs()->toArray());
+        $sessions = [];
+        foreach ($logs as $log) {
+            $date = $log->getCreatedAt()->format('D M d o');
+            if (!isset($sessions[$date])) {
+                $sessions[$date] = [];
+            }
+            $sessions[$date][] = $log;
+        }
         return $this->render('log/index.html.twig', [
-            'logs' => $user->getLogs(),
+            'sessions' => $sessions,
         ]);
     }
 

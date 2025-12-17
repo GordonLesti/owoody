@@ -3,125 +3,131 @@
 {% block navigation_title %}Logs{% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl pb-12">
-    <ul role="list" class="-mb-8">
-    {% for log in logs|reverse %}
-    <li>
-        <div class="relative pb-8">
-            {% if not loop.last %}
-            <span aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-white/10"></span>
-            {% endif %}
-            <div class="relative flex space-x-3">
-                <div>
-                    <span class="flex size-8 items-center justify-center rounded-full ring-8 ring-gray-100 dark:ring-gray-900 {{ log.isSuccess ? 'bg-green-500' : 'bg-red-500'}}">
-                        {% if log.isSuccess %}
-                        <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
-                            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
-                        </svg>
-                        {% else %}
-                        <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
-                            <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
-                        </svg>
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                    <div class="grow">
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            <span class="font-medium text-gray-900 dark:text-white">{{ log.user.userIdentifier }}</span>{{ log.isSuccess ? '' : ' tried to' }} sent
-                            <span class="font-medium text-gray-900 dark:text-white">{{ log.route.name }}</span>
-                            {% if log.angle %}
-                                @ <span class="font-medium text-gray-900 dark:text-white">{{ log.angle }}°</span>
-                            {% endif %}
-                            with <span class="font-medium text-gray-900 dark:text-white">{{ log.attempts }}</span>
-                            {% if log.attempts > 1 %}
-                                attempts.
-                            {% else %}
-                                attempt.
-                            {% endif %}
-                        </p>
-                        <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
-                        {% if log.isMirrored %}
-                            <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                            </svg>
-                        {% endif %}
-                        {{ log.grade.value }}
-                            <div class="flex items-center">
-                                {% for i in 1..5 %}
-                                    <span class="{{ log.rating >= i ? 'text-yellow-400' : 'text-gray-500 dark:text-gray-400' }}">
-                                        <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                            <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
-                                        </svg>
-                                    </span>
-                                {% endfor %}
-                            </div>
-                        </div>                            
-                    </div>
-                    <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                        <time datetime="{{ log.createdAt|date }}">{{ log.createdAt|date("D M d o") }}</time>
-                    </div>
-                    <el-dropdown class="relative flex-none self-center">
-                        <button class="relative block text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-                            <span class="absolute -inset-2.5"></span>
-                            <span class="sr-only">Edit Log</span>
-                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
-                                <path d="M10 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM10 8.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM11.5 15.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
-                            </svg>
-                        </button>
-                        <el-menu anchor="bottom end" popover class="w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:divide-white/10 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-                            <div class="py-1">
-                                <a href="{{ path('log_edit', {id: log.id}) }}" class="group/item flex items-center px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white" role="menuitem" tabindex="-1" id="menu-item-0">
-                                    <svg class="mr-3 size-5 text-gray-400 group-focus/item:text-gray-500 dark:text-gray-500 dark:group-focus/item:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                                        <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
-                                        <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
-                                    </svg>
-                                    Edit
-                                </a>
-                                <button  command="show-modal" commandfor="dialog" class="w-full group/item flex items-center px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white" role="menuitem" tabindex="-1" id="menu-item-6">
-                                    <svg class="mr-3 size-5 text-gray-400 group-focus/item:text-gray-500 dark:text-gray-500 dark:group-focus/item:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                                        <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
-                                    </svg>
-                                    Delete
-                                </button>
-                            </div>
-                        </el-menu>
-
-                        <el-dialog>
-                            <dialog id="dialog" aria-labelledby="dialog-title" class="z-10 fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
-                                <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
-                                <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
-                                    <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-800 dark:outline dark:-outline-offset-1 dark:outline-white/10">
-                                        <div class="sm:flex sm:items-start">
-                                            <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600 dark:text-red-400">
-                                                    <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
-                                                </svg>
-                                            </div>
-                                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                                <h3 id="dialog-title" class="text-base font-semibold text-gray-900 dark:text-white">Delete log</h3>
-                                                <div class="mt-2">
-                                                    <p class="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete this log? This action cannot be undone.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                                            <form action="{{ url('log_delete', {id: log.id}) }}" method="post">
-                                                <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
-                                                <button type="submit" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Delete</button>
-                                            </form>
-                                            <button command="close" commandfor="dialog" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">Cancel</button>
-                                        </div>
-                                    </el-dialog-panel>
-                                </div>
-                            </dialog>
-                        </el-dialog>
-                    </el-dropdown>
-                </div>
-            </div>
+<div class="mx-auto max-w-2xl pb-12 space-y-3">
+    {% for date, session in sessions %}
+    <div class="relative divide-y divide-gray-200 sm:rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
+        <div class="sticky top-0 z-10 sm:rounded-t-lg px-4 py-5 sm:px-6 bg-white dark:bg-gray-800/50">
+            <h3 class="relative text-base font-semibold text-gray-900 dark:text-white">{{ date }}</h3>
         </div>
-    </li>
+        <ul role="list" class="px-4 py-5 sm:p-6">
+            {% for log in session %}
+            <li>
+                {% if not loop.last %}
+                <div class="relative pb-8">
+                    <span aria-hidden="true" class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200 dark:bg-white/10"></span>
+                {% else %}
+                <div class="relative">
+                {% endif %}
+                    <div class="relative flex space-x-3">
+                        <div>
+                            <span class="flex size-8 items-center justify-center rounded-full ring-8 ring-white dark:ring-gray-800/50 {{ log.isSuccess ? 'bg-green-500' : 'bg-red-500'}}">
+                                {% if log.isSuccess %}
+                                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
+                                    <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                                </svg>
+                                {% else %}
+                                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-white">
+                                    <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                                </svg>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+                            <div class="grow">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ log.user.userIdentifier }}</span>{{ log.isSuccess ? '' : ' tried to' }} sent
+                                    <span class="font-medium text-gray-900 dark:text-white">{{ log.route.name }}</span>
+                                    {% if log.angle %}
+                                        @ <span class="font-medium text-gray-900 dark:text-white">{{ log.angle }}°</span>
+                                    {% endif %}
+                                    with <span class="font-medium text-gray-900 dark:text-white">{{ log.attempts }}</span>
+                                    {% if log.attempts > 1 %}
+                                        attempts.
+                                    {% else %}
+                                        attempt.
+                                    {% endif %}
+                                </p>
+                                <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500 dark:text-gray-400">
+                                {% if log.isMirrored %}
+                                    <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                        <path fill-rule="evenodd" d="M10.47 2.22a.75.75 0 0 1 1.06 0l2.25 2.25a.75.75 0 0 1 0 1.06l-2.25 2.25a.75.75 0 1 1-1.06-1.06l.97-.97H5.75a.75.75 0 0 1 0-1.5h5.69l-.97-.97a.75.75 0 0 1 0-1.06Zm-4.94 6a.75.75 0 0 1 0 1.06l-.97.97h5.69a.75.75 0 0 1 0 1.5H4.56l.97.97a.75.75 0 1 1-1.06 1.06l-2.25-2.25a.75.75 0 0 1 0-1.06l2.25-2.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                                    </svg>
+                                {% endif %}
+                                {{ log.grade.value }}
+                                    <div class="flex items-center">
+                                        {% for i in 1..5 %}
+                                            <span class="{{ log.rating >= i ? 'text-yellow-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                                <svg viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                                    <path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .692.462l1.41 3.393 3.664.293a.75.75 0 0 1 .428 1.317l-2.791 2.39.853 3.575a.75.75 0 0 1-1.12.814L7.998 12.08l-3.135 1.915a.75.75 0 0 1-1.12-.814l.852-3.574-2.79-2.39a.75.75 0 0 1 .427-1.318l3.663-.293 1.41-3.393A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>                            
+                            </div>
+                            <el-dropdown class="relative flex-none self-center">
+                                <button class="relative block text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                                    <span class="absolute -inset-2.5"></span>
+                                    <span class="sr-only">Edit Log</span>
+                                    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
+                                        <path d="M10 3a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM10 8.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM11.5 15.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
+                                    </svg>
+                                </button>
+                                <el-menu anchor="bottom end" popover class="w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:divide-white/10 dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+                                    <div class="py-1">
+                                        <a href="{{ path('log_edit', {id: log.id}) }}" class="group/item flex items-center px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white" role="menuitem" tabindex="-1" id="menu-item-0">
+                                            <svg class="mr-3 size-5 text-gray-400 group-focus/item:text-gray-500 dark:text-gray-500 dark:group-focus/item:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                                <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                                                <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                                            </svg>
+                                            Edit
+                                        </a>
+                                        <button  command="show-modal" commandfor="dialog" class="w-full group/item flex items-center px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5 dark:focus:text-white" role="menuitem" tabindex="-1" id="menu-item-6">
+                                            <svg class="mr-3 size-5 text-gray-400 group-focus/item:text-gray-500 dark:text-gray-500 dark:group-focus/item:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                                <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
+                                            </svg>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </el-menu>
+
+                                <el-dialog>
+                                    <dialog id="dialog" aria-labelledby="dialog-title" class="z-10 fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+                                        <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in dark:bg-gray-900/50"></el-dialog-backdrop>
+                                        <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0">
+                                            <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-closed:sm:translate-y-0 data-closed:sm:scale-95 dark:bg-gray-800 dark:outline dark:-outline-offset-1 dark:outline-white/10">
+                                                <div class="sm:flex sm:items-start">
+                                                    <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10 dark:bg-red-500/10">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 text-red-600 dark:text-red-400">
+                                                            <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                                        <h3 id="dialog-title" class="text-base font-semibold text-gray-900 dark:text-white">Delete log</h3>
+                                                        <div class="mt-2">
+                                                            <p class="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete this log? This action cannot be undone.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                                    <form action="{{ url('log_delete', {id: log.id}) }}" method="post">
+                                                        <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                                                        <button type="submit" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Delete</button>
+                                                    </form>
+                                                    <button command="close" commandfor="dialog" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">Cancel</button>
+                                                </div>
+                                            </el-dialog-panel>
+                                        </div>
+                                    </dialog>
+                                </el-dialog>
+                            </el-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
     {% endfor %}
-    </ul>
 </div>
 {% endblock %}

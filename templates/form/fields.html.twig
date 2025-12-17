@@ -1,5 +1,5 @@
 {% block hold_setup_widget %}
-    <div x-data="{holdSetupValue: '[]'}" @hold-setup-change.window="holdSetupValue = JSON.stringify($event.detail)">
+    <div x-data="{holdSetupValue: '[]'}" @hold-setup-change.window="holdSetupValue = JSON.stringify($event.detail)" class="mt-2">
         {% include 'component/hold_setup.html.twig' with {'edit_mode': true} %}
         <input type="hidden" {{ block('widget_attributes') }} :value="holdSetupValue">
     </div>

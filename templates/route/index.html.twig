@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl pb-12">
+<div class="mx-auto max-w-2xl overflow-hidden bg-white shadow-sm sm:rounded-md dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
     <script>
         function initRouteList()
         {
@@ -203,9 +203,9 @@
             }
         }
     </script>
-    <ul x-data="initRouteList()" @filter.window="observeFilter" @angle.window="observeAngle" role="list" class="divide-y divide-gray-200 dark:divide-white/5">
+    <ul x-data="initRouteList()" @filter.window="observeFilter" @angle.window="observeAngle" role="list" class="divide-y divide-gray-200 dark:divide-white/10">
         <template x-for="route in filteredRoutes" :key="route.id" hidden>
-            <li class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 flex-nowrap">
+            <li class="px-4 py-4 sm:px-6">
                 <div class="grow overflow-auto">
                     <p class="text-sm/6 font-semibold text-gray-900 dark:text-white text-nowrap overflow-hidden text-ellipsis">
                         <a :href="route.link" class="hover:underline" x-text="route.name"></a>

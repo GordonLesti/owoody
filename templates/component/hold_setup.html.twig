@@ -86,7 +86,7 @@
         };
     }
 </script>
-<div x-data="initHoldSetup({{ rows }}, {{ columns }}, '{{ value }}', {% if edit_mode %}true{% else %}false{% endif %})" @bulb.window="observeBulb" @mirror.window="observeMirror" class="relative mt-2">
+<div x-data="initHoldSetup({{ rows }}, {{ columns }}, '{{ value }}', {% if edit_mode %}true{% else %}false{% endif %})" @bulb.window="observeBulb" @mirror.window="observeMirror" class="relative">
     {% for rowIndex in 0..rows-1 %}
         <div class="flex flex-row">
             {% for columnIndex in 0..columns-1 %}

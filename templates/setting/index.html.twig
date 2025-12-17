@@ -13,8 +13,10 @@
 {% endblock %}
 
 {% block main %}
-<div class="mx-auto max-w-2xl">
-    {{ form_start(form, {method: 'POST', action: path('setting'), attr: {id: 'setting_form'}}) }}
-    {{ form_end(form) }}
+<div class="mx-auto max-w-2xl overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
+    <div class="px-4 py-5 sm:p-6">
+        {{ form_start(form, {method: 'POST', action: path('setting'), attr: {id: 'setting_form'}}) }}
+        {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}

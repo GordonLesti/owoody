@@ -5,19 +5,19 @@
 {% block main %}
 {% if route_count > 0 %}
 <dl class="gap-5 flex flex-col sm:flex-row">
-    <div class="grow overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+    <div class="grow overflow-hidden sm:rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
       <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Routes</dt>
       <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ route_count }}</dd>
     </div>
-    <div class="grow overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+    <div class="grow overflow-hidden sm:rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
       <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Accents</dt>
       <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ log_count }}</dd>
     </div>
-    <div class="grow overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+    <div class="grow overflow-hidden sm:rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
       <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Easist</dt>
       <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ easiest.value }}</dd>
     </div>
-    <div class="grow overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
+    <div class="grow overflow-hidden sm:rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6 dark:bg-gray-800/75 dark:inset-ring dark:inset-ring-white/10">
       <dt class="truncate text-sm font-medium text-gray-500 dark:text-gray-400">Hardest</dt>
       <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ hardest.value }}</dd>
     </div>
