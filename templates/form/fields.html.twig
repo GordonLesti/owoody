@@ -9,7 +9,7 @@
         function initAngleInput()
         {
             return {
-                angle: Alpine.$persist(0),
+                angle: {% if value is defined and value != '' %}{{ value }}{% else %}Alpine.$persist(0){% endif %},
                 observeAngle(event) {
                     this.angle = event.detail;
                 }
@@ -26,7 +26,7 @@
         function initIsMirroredInput()
         {
             return {
-                isMirrored: Alpine.$persist({}),
+                isMirrored: {% if value is defined and value != '' %}{'{{route_entity.id}}': {{ value ? 'true' : 'false' }}}{% else %}Alpine.$persist({}){% endif %},
                 init() {
                     this.isMirrored[{{route_entity.id}}] = this.isMirrored[{{route_entity.id}}] ?? false;
                 },
