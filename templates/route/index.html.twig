@@ -22,6 +22,17 @@
     <script>
         function initRouteList()
         {
+            const createNewRandomSortArray = function () {
+                var keys = [...Array({{ routes|length }}).keys()];
+                var newSortArray = [];
+                while (keys.length > 0) {
+                    const randomKey = Math.floor(Math.random() * keys.length);
+                    newSortArray.push(keys[randomKey]);
+                    keys.splice(randomKey, 1);
+                }
+                return newSortArray;
+            };
+
             return {
                 routes: {{ routes|json_encode|raw }}.map((route) => {
                     route['created_at'] = new Date(route['created_at'].date);
@@ -43,6 +54,7 @@
                 bookmarks: {{ bookmarks|json_encode|raw }},
                 {% endif %}
                 angle: Alpine.$persist(0),
+                randomSortArray: Alpine.$persist(createNewRandomSortArray()),
                 observeAngle(event) {
                     this.angle = event.detail;
                     this.updateFilteredRoutes();
@@ -176,9 +188,16 @@
                             }
                             return 0;
                         }
+                        if (this.sortBy == 'random') {
+                            const diff = this.randomSortArray[this.routes.indexOf(a)] - this.randomSortArray[this.routes.indexOf(b)];
+                            return diff / Math.abs(diff);
+                        }
                     });
                 },
                 observeFilter($event) {
+                    if ($event.detail.sortBy === 'random' && this.sortBy !== 'random') {
+                        this.randomSortArray = createNewRandomSortArray();
+                    }
                     this.name = $event.detail.name;
                     this.minGrade = $event.detail.minGrade;
                     this.maxGrade = $event.detail.maxGrade;
