@@ -34,7 +34,7 @@ class Route implements JsonSerializable
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'routes')]
     private User $routeSetter;
 
-    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'route')]
+    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'route', cascade: ['remove'])]
     private Collection $logs;
 
     #[ORM\Column]
