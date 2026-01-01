@@ -198,15 +198,22 @@ class Log implements JsonSerializable
     {
         return [
             'id' => $this->id,
-            'user' => $this->user,
-            'route' => $this->route,
+            'user' => [
+                'id' => $this->user->getId(),
+                'user_identifier' => $this->user->getUserIdentifier(),
+            ],
+            'route' => [
+                'id' => $this->route->getId(),
+                'name' => $this->route->getName(),
+            ],
             'is_mirrored' => $this->isMirrored,
             'angle' => $this->angle,
+            'is_success' => $this->isSuccess,
             'grade' => $this->grade,
             'rating' => $this->rating,
             'attempts' => $this->attempts,
             'note' => $this->note,
-            'create_at' => $this->createdAt,
+            'created_at' => $this->createdAt,
         ];
     }
 }

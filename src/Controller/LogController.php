@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Log;
 use App\Entity\Route as EntityRoute;
+use App\Enum\Fontainebleau;
 use App\Form\LogType;
 use App\Repository\SettingRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -33,6 +34,8 @@ final class LogController extends AbstractController
         }
         return $this->render('log/index.html.twig', [
             'sessions' => $sessions,
+            'logs' => $user->getLogs()->toArray(),
+            'grades' => Fontainebleau::cases(),
         ]);
     }
 

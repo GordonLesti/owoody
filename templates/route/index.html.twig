@@ -4,6 +4,7 @@
 
 {% block navigation_buttons %}
 {% include 'button/angle.html.twig' %}
+{% include 'button/bulb.html.twig' %}
 {% if app.user %}
 <button @click="location.href='{{ path('route_new') }}'" class="relative rounded-full p-1 text-fuchsia-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white">
     <span class="absolute -inset-1.5"></span>
