@@ -38,7 +38,7 @@
                     route['created_at'] = new Date(route['created_at'].date);
                     return route;
                 }),
-                filteredRoutes: [],
+                filteredRoutes: Alpine.$persist([]),
                 init() {
                     {% for index, route in routes %}
                         this.routes[{{ index }}]['link'] = "{{ path('route_view', {id: route.id}) }}";

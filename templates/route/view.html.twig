@@ -39,6 +39,24 @@
             observeAngle(event) {
                 this.angle = event.detail;
             },
+            init() {
+                const index = this.filteredRoutes.findIndex((route) => {
+                    return route['id'] === {{ route_entity.id }};
+                });
+                if (index !== -1) {
+                    const prevIndex = index - 1;
+                    if (prevIndex >= 0) {
+                        this.previous = this.filteredRoutes[prevIndex];
+                    }
+                    const nextIndex = index + 1;
+                    if (nextIndex < this.filteredRoutes.length) {
+                        this.next = this.filteredRoutes[nextIndex];
+                    }
+                }
+            },
+            filteredRoutes: Alpine.$persist([]),
+            previous: null,
+            next: null,
             grades: {{ grades|json_encode|raw }},
             accRatings: {{ acc_ratings|json_encode|raw }},
             accGrades: {{ acc_grades|json_encode|raw }},
@@ -60,6 +78,24 @@
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
         <div class="px-4 py-5 sm:p-6">
             {% include 'component/hold_setup.html.twig' with {'rows': route_entity.holdSetup|length, 'columns': route_entity.holdSetup[0]|length, 'value': route_entity.holdSetup|json_encode, 'edit_mode': false} %}
+            <nav class="flex items-center justify-between border-t border-gray-200 px-4 mt-4 sm:px-0 dark:border-white/10" x-show="previous || next" x-cloak>
+                <div class="-mt-px flex w-0 flex-1" x-show="!!previous" x-cloak>
+                    <a :href="previous && previous.link" class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+                    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="mr-3 size-5 text-gray-400 dark:text-gray-500">
+                        <path d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" clip-rule="evenodd" fill-rule="evenodd" />
+                    </svg>
+                    Previous
+                    </a>
+                </div>
+                <div class="-mt-px flex w-0 flex-1 justify-end"  x-show="!!next" x-cloak>
+                    <a :href="next && next.link" class="inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-gray-200">
+                    Next
+                    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="ml-3 size-5 text-gray-400 dark:text-gray-500">
+                        <path d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" fill-rule="evenodd" />
+                    </svg>
+                    </a>
+                </div>
+            </nav>
         </div>
     </div>
 
