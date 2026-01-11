@@ -101,7 +101,7 @@
                             if (this.exclUngraded) {
                                 return false;
                             }
-                        } else if (routeGradeIndex < minGradeIndex || routeGradeIndex > maxGradeIndex){
+                        } else if (routeGradeIndex < minGradeIndex - 0.5 || routeGradeIndex >= maxGradeIndex + 0.5){
                             return false;
                         }
                         const routeRating = this.getRouteRating(route.id);
@@ -109,7 +109,7 @@
                             if (this.exclUnrated) {
                                 return false;
                             }
-                        } else if (routeRating < this.minRating || routeRating > this.maxRating) {
+                        } else if (routeRating < this.minRating - 0.5 || routeRating >= this.maxRating + 0.5) {
                             return false;
                         }
                         {% if app.user %}
