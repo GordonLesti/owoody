@@ -107,8 +107,8 @@
             {% endfor %}
         </div>
     {% endfor %}
-    <span class="hidden inline-flex items-center rounded-full px-2 py-1 text-md font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
-        'hidden': badgeStatus == 0,
+    <span class="invisible inline-flex items-center rounded-full px-2 py-1 text-md font-medium absolute z-10 top-2 left-1/2 -translate-x-1/2" :class="{
+        'invisible': badgeStatus == 0,
         'bg-blue-100 text-blue-700': badgeStatus == 1,
         'bg-red-100 text-red-700': badgeStatus == 2,
         'bg-yellow-100 text-yellow-700': badgeStatus == 3,
