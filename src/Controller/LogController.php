@@ -9,6 +9,7 @@ use App\Entity\Route as EntityRoute;
 use App\Enum\Fontainebleau;
 use App\Form\LogType;
 use App\Repository\SettingRepository;
+use App\Service\LogAccumulator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,12 +88,25 @@ final class LogController extends AbstractController
         Request $request,
         EntityRoute $route,
         EntityManagerInterface $entityManager,
-        SettingRepository $settingRepository
+        SettingRepository $settingRepository,
+        LogAccumulator $logAcc
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $log = new Log();
         $log->setUser($this->getUser());
         $log->setRoute($route);
+        $angle = $request->get('angle');
+        if ($angle) {
+            $log->setAngle((int)$angle);
+            $accData = $logAcc->getAccumulatedData($route);
+            if (isset($accData['grades'][$angle])) {
+                $gradeIndex = round($accData['grades'][$angle]);
+                $log->setGrade(Fontainebleau::cases()[$gradeIndex]);
+            }
+            if (isset($accData['ratings'][$angle])) {
+                $log->setRating((int)round($accData['ratings'][$angle]));
+            }
+        }
         $form = $this->createForm(LogType::class, $log, [
             'method' => 'POST',
             'action' => $this->generateUrl('log_new', ['id' => $route->getId()]),

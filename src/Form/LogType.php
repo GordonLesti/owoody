@@ -8,13 +8,13 @@ use App\Entity\Log;
 use App\Entity\Route;
 use App\Entity\User;
 use App\Enum\Fontainebleau;
-use App\Form\Type\AngleType;
 use App\Form\Type\IsMirroredType;
 use App\Form\Type\RatingType;
 use BackedEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -41,10 +41,12 @@ final class LogType extends AbstractType
             'mapped' => true,
             'required' => true,
             'route_entity' => $options['route_entity'],
-        ])->add('angle', AngleType::class, [
+        ])->add('angle', ChoiceType::class, [
             'label' => 'Angle',
             'mapped' => true,
+            'choices' => array_combine(range(0, 40, 5), range(0, 40, 5)),
             'required' => false,
+            'disabled' => $options['data']->getId() === null,
             'invalid_message' => 'The angle is invalid.',
         ])->add('is_success', CheckboxType::class, [
             'label' => 'Success',
