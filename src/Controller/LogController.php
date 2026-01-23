@@ -44,6 +44,12 @@ final class LogController extends AbstractController
     public function edit(Request $request, Log $log, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($log->getUser() !== $this->getUser()) {
+            $exception = $this->createAccessDeniedException('Access Denied.');
+            $exception->setAttributes(['IS_AUTHENTICATED']);
+
+            throw $exception;
+        }
         $form = $this->createForm(LogType::class, $log, [
             'method' => 'POST',
             'action' => $this->generateUrl('log_edit', ['id' => $log->getId()]),
@@ -71,6 +77,12 @@ final class LogController extends AbstractController
     public function delete(Request $request, Log $log, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($log->getUser() !== $this->getUser()) {
+            $exception = $this->createAccessDeniedException('Access Denied.');
+            $exception->setAttributes(['IS_AUTHENTICATED']);
+
+            throw $exception;
+        }
         $token = (string) $request->getPayload()->get('token');
         if (!$this->isCsrfTokenValid('delete', $token)) {
             $this->addFlash('error', 'Invalid Csrf token.');
