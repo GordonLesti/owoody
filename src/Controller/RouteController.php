@@ -111,6 +111,12 @@ final class RouteController extends AbstractController
         SettingRepository $settingRepository
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($route->getRouteSetter() !== $this->getUser()) {
+            $exception = $this->createAccessDeniedException('Access Denied.');
+            $exception->setAttributes(['IS_AUTHENTICATED']);
+
+            throw $exception;
+        }
         $form = $this->createForm(RouteType::class, $route, [
             'method' => 'POST',
             'action' => $this->generateUrl('route_edit', ['id' => $route->getId()]),
@@ -180,6 +186,12 @@ final class RouteController extends AbstractController
     public function delete(Request $request, EntityRoute $route, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+        if ($route->getRouteSetter() !== $this->getUser()) {
+            $exception = $this->createAccessDeniedException('Access Denied.');
+            $exception->setAttributes(['IS_AUTHENTICATED']);
+
+            throw $exception;
+        }
         $token = (string) $request->getPayload()->get('token');
         if (!$this->isCsrfTokenValid('delete', $token)) {
             $this->addFlash('error', 'Invalid Csrf token.');
