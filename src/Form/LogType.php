@@ -46,7 +46,6 @@ final class LogType extends AbstractType
             'mapped' => true,
             'choices' => array_combine(range(0, 40, 5), range(0, 40, 5)),
             'required' => false,
-            'disabled' => $options['data']->getId() === null,
             'invalid_message' => 'The angle is invalid.',
         ])->add('is_success', CheckboxType::class, [
             'label' => 'Success',
