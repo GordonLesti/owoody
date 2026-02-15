@@ -108,7 +108,7 @@ final class LogController extends AbstractController
         $log->setUser($this->getUser());
         $log->setRoute($route);
         $angle = $request->query->get('angle');
-        if ($angle) {
+        if (isset($angle)) {
             $log->setAngle((int)$angle);
             $accData = $logAcc->getAccumulatedData($route);
             if (isset($accData['grades'][$angle])) {
