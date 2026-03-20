@@ -3,21 +3,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use ArrayAccess;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
-/**
- * @implements ArrayAccess<int, int|null>
- */
-class NeoPixel implements ArrayAccess
+class NeoPixel implements PixelChainInterface
 {
     /** @var int[] */
     private array $pixels = [];
 
     public function __construct(
-        private readonly int $pixelNum,
-        private readonly PixelOrder $pixelOrder = PixelOrder::GRBW
+        private readonly int $pixelNum
     ) {
     }
 
@@ -42,10 +37,7 @@ class NeoPixel implements ArrayAccess
             $this->offsetUnset($offset);
             return;
         }
-        $maxLimit = 0x100000000;
-        if (in_array($this->pixelOrder, [PixelOrder::RGB, PixelOrder::GRB])) {
-            $maxLimit = 0x1000000;
-        }
+        $maxLimit = 0x1000000;
         if ($offset < -1 || $offset > $maxLimit) {
             throw new InvalidArgumentException(sprintf(
                 "Invalid value. Greater or equal 0 and smaller %X allowed.",
@@ -66,9 +58,8 @@ class NeoPixel implements ArrayAccess
         $cmd = "python3 -c \"import board; ";
         $cmd .= "import neopixel_spi as neopixel; ";
         $cmd .= sprintf(
-            "pixels = neopixel.NeoPixel_SPI(board.SPI(), %d, pixel_order=neopixel.%s, auto_write=False); ",
-            $this->pixelNum,
-            $this->pixelOrder->value
+            "pixels = neopixel.NeoPixel_SPI(board.SPI(), %d, auto_write=False); ",
+            $this->pixelNum
         );
         foreach ($this->pixels as $index => $color) {
             $cmd .= sprintf("pixels[%d] = 0x%X; ", $index, $color);

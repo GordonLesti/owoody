@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enum\LedHoldType;
-use App\Service\NeoPixel;
-use App\Service\PixelOrder;
+use App\Service\PixelChainFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,14 +14,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BulbController extends AbstractController
 {
     #[Route('/bulb', name: 'bulb', format: 'json', methods: ['POST'])]
-    public function index(Request $request): Response
+    public function index(Request $request, PixelChainFactoryInterface $pixelChainFactory): Response
     {
         $colors = [
             LedHoldType::NONE->value => null,
             LedHoldType::HAND->value => 0x0000FF,
-            LedHoldType::FINISH->value => 0xFF0000,
+            LedHoldType::FINISH->value => 0x00FF00,
             LedHoldType::FOOT->value => 0xFFFF00,
-            LedHoldType::START->value => 0x00FF00,
+            LedHoldType::START->value => 0xFF0000,
         ];
         $pixelConfig = array_reverse($request->toArray());
         for ($i = 0; $i < count($pixelConfig); $i++) {
@@ -31,11 +30,11 @@ final class BulbController extends AbstractController
             }
         }
         $flattenPixelConfig = array_merge(...$pixelConfig);
-        $neoPixels = new NeoPixel(count($flattenPixelConfig), PixelOrder::RGB);
+        $pixelChain = $pixelChainFactory->create(count($flattenPixelConfig));
         foreach (array_filter($flattenPixelConfig) as $index => $pixel) {
-            $neoPixels[$index] = $colors[$pixel];
+            $pixelChain[$index] = $colors[$pixel];
         }
-        $neoPixels->show();
+        $pixelChain->show();
         return $this->json([]);
     }
 }
