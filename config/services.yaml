@@ -23,4 +23,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Service\NeoPixelFactory: ~
-    App\Service\PixelChainFactoryInterface: '@App\Service\NeoPixelFactory'
+    App\Service\Pi5NeoFactory: ~
+    #App\Service\PixelChainFactoryInterface: '@App\Service\NeoPixelFactory'
+    App\Service\PixelChainFactoryInterface: '@App\Service\Pi5NeoFactory'
