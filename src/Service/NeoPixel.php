@@ -58,13 +58,13 @@ class NeoPixel implements PixelChainInterface
         $cmd = "python3 -c \"import board; ";
         $cmd .= "import neopixel_spi as neopixel; ";
         $cmd .= sprintf(
-            "pixels = neopixel.NeoPixel_SPI(board.SPI(), %d, auto_write=False); ",
+            "pixels = neopixel.NeoPixel_SPI(board.SPI(), %d, auto_write=True); ",
             $this->pixelNum
         );
         foreach ($this->pixels as $index => $color) {
             $cmd .= sprintf("pixels[%d] = 0x%X; ", $index, $color);
         }
-        $cmd .= "pixels.show();\"";
+        $cmd .= "\"";
         shell_exec($cmd);
     }
 
