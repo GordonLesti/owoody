@@ -29,7 +29,7 @@ class LogAccumulator
             if (!isset($groupedGrades[$angle])) {
                 $groupedGrades[$angle] = [];
             }
-            $groupedGrades[$angle][] = $this->transerGradeToNumber($log->getGrade());
+            $groupedGrades[$angle][] = $this->transferGradeToNumber($log->getGrade());
             if (!isset($groupedRatings[$angle])) {
                 $groupedRatings[$angle] = [];
             }
@@ -62,7 +62,7 @@ class LogAccumulator
         return $result;
     }
 
-    private function transerGradeToNumber(Fontainebleau $grade): int
+    private function transferGradeToNumber(Fontainebleau $grade): int
     {
         return array_search($grade, $this->gradeScale);
     }
