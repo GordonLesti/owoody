@@ -1,17 +1,12 @@
 {
     "devDependencies": {
-        "@babel/core": "^7.17.0",
-        "@babel/preset-env": "^7.16.0",
-        "@hotwired/stimulus": "^3.0.0",
-        "@hotwired/turbo": "^7.1.0 || ^8.0",
-        "@symfony/stimulus-bridge": "^3.2.0 || ^4.0.0",
-        "@symfony/webpack-encore": "^5.0.0",
-        "autoprefixer": "^10.4.20",
-        "core-js": "^3.38.0",
-        "regenerator-runtime": "^0.13.9",
-        "webpack": "^5.74.0",
-        "webpack-cli": "^5.1.0",
-        "webpack-notifier": "^1.15.0"
+        "@babel/core": "^8.0.0",
+        "@babel/preset-env": "^8.0.0",
+        "@symfony/webpack-encore": "^7.0.0",
+        "babel-plugin-polyfill-corejs3": "^1.0.0",
+        "core-js": "^3.49.0",
+        "webpack": "^5.82",
+        "webpack-cli": "^7.0.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -22,13 +17,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@alpinejs/persist": "^3.14.8",
-        "@tailwindcss/postcss": "^4.1.17",
-        "@tailwindplus/elements": "^1.0.18",
-        "alpinejs": "^3.14.8",
-        "apexcharts": "^5.3.6",
-        "postcss": "^8.5.6",
-        "postcss-loader": "^8.2.0",
-        "tailwindcss": "^4.1.17"
+        "@alpinejs/persist": "^3.15.12",
+        "@tailwindcss/postcss": "^4.3.3",
+        "@tailwindplus/elements": "^1.0.22",
+        "alpinejs": "^3.15.12",
+        "apexcharts": "^6.7.0",
+        "postcss": "^8.5.25",
+        "postcss-loader": "^8.2.1",
+        "tailwindcss": "^4.3.3"
     }
 }
