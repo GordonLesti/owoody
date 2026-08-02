@@ -20,13 +20,17 @@ use Symfony\Component\Routing\Requirement\Requirement;
 final class LogController extends AbstractController
 {
     #[Route('/logs', name: 'log', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $logsPerpage = 50;
+        $page = (int) $request->query->get('page', 1);
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         $user = $this->getUser();
         $logs = array_reverse($user->getLogs()->toArray());
+        $pages = (int) ceil(count($logs) / $logsPerpage);
         $sessions = [];
-        foreach ($logs as $log) {
+        $slicedLogs = array_slice($logs, ($page - 1) * $logsPerpage, $logsPerpage);
+        foreach ($slicedLogs as $log) {
             $date = $log->getCreatedAt()->format('D M d o');
             if (!isset($sessions[$date])) {
                 $sessions[$date] = [];
@@ -35,8 +39,9 @@ final class LogController extends AbstractController
         }
         return $this->render('log/index.html.twig', [
             'sessions' => $sessions,
-            'logs' => $user->getLogs()->toArray(),
             'grades' => Fontainebleau::cases(),
+            'page' => $page,
+            'pages' => $pages,
         ]);
     }
 

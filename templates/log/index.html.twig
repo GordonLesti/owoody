@@ -132,6 +132,45 @@
             </li>
             {% endfor %}
         </ul>
+        {% if loop.last and pages > 1 %}
+            <div class="relative divide-y divide-gray-200 sm:rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
+                <nav class="flex items-center justify-between px-4 pb-4">
+                    <div class="-mt-px flex w-0 flex-1">
+                        {% if page > 1 %}
+                            <a href="{{ url('log', {page: page - 1}) }}" class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="mr-3 size-5 text-gray-400">
+                                <path d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            Previous
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="hidden md:-mt-px md:flex">
+                        {% for i in 1..pages %}
+                            {% if (i-1)|abs<2 or (i-page)|abs<2 or (i-pages)|abs<2 %}
+                                {% if i == page %}
+                                    <a href="{{ url('log', {page: i}) }}" aria-current="page" class="inline-flex items-center border-t-2 border-fuchsia-500 px-4 pt-4 text-sm font-medium text-indigo-600">{{ i }}</a>
+                                {% else %}
+                                    <a href="{{ url('log', {page: i}) }}" class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">{{ i }}</a>
+                                {% endif %}
+                            {% elseif (i == 3 and page != 1) or (i == pages - 2 and page != pages) %}
+                                <span class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500">...</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="-mt-px flex w-0 flex-1 justify-end">
+                        {% if page < pages %}
+                            <a href="{{ url('log', {page: page + 1}) }}" class="inline-flex items-center border-t-2 border-transparent pt-4 pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Next
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="ml-3 size-5 text-gray-400">
+                                <path d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            </a>
+                        {% endif %}
+                    </div>
+                </nav>
+            </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
